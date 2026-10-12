@@ -1,5 +1,15 @@
 # Registro de cambios
 
+## Primer despliegue en Coolify — 2026-10-12
+
+### Observado en el primer despliegue (`logs/errorDeploy.log`)
+- La imagen **se construye correctamente en Coolify**. El contenedor nuevo no arrancó porque `ADMIN_PASSWORD_HASH` no llegó como variable de entorno en tiempo de ejecución; el entrypoint lo detectó, el contenedor se marcó «unhealthy» y Coolify **conservó el contenedor anterior**. Es el comportamiento previsto de la comprobación de arranque y del *rolling update*.
+- Se confirmó que Coolify usa el `HEALTHCHECK` del Dockerfile. Su aviso sobre `curl`/`wget` es genérico y no aplica (la sonda usa `node`).
+
+### Cambiado
+- `docker-entrypoint.sh` informa **todos** los problemas de configuración de una vez (antes se detenía en el primero), para no gastar un despliegue por cada variable que falte.
+- `docs/DEPLOYMENT.md`: lista rápida de variables para Coolify y este síntoma en «Si algo falla».
+
 ## Alertas de secretos en GitHub — 2026-10-12
 
 ### Cambiado

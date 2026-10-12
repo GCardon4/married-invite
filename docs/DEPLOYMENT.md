@@ -37,6 +37,18 @@ Usa el valor `base64:…` del hash. Si pegas el hash `$argon2id$…` sin codific
 
 No marques estas variables como «Build Variable». No hace falta, y mantenerlas solo en ejecución evita que se escriban en capas de la imagen.
 
+### Lista rápida para Coolify
+
+En **Environment Variables** de la aplicación crea estas tres como mínimo, disponibles en **tiempo de ejecución** (Runtime), y vuelve a desplegar:
+
+| Nombre | Valor |
+|---|---|
+| `ADMIN_PASSWORD_HASH` | El valor `base64:…` que imprime `npm run hash-password` (solo el valor, sin el nombre ni comillas) |
+| `SESSION_SECRET` | Texto aleatorio de 32 caracteres o más |
+| `APP_BASE_URL` | `https://tu-dominio` |
+
+Usa valores de producción propios: no copies los de tu `.env.local`.
+
 ## 3. Configuración en Coolify
 
 1. **Nueva aplicación** desde el repositorio de GitHub, con build pack **Dockerfile** (el `Dockerfile` está en la raíz).
@@ -106,7 +118,9 @@ Esto protege contra errores o corrupción, no contra la pérdida del disco: desc
 
 | Síntoma | Causa probable | Qué hacer |
 |---|---|---|
-| El contenedor no arranca y dice `ERROR` | Variables faltantes o inválidas | Corregir en Coolify (§2) |
+| El despliegue termina con «New container is unhealthy… rolling back» y los registros repiten `[entrypoint] ERROR: ADMIN_PASSWORD_HASH no está definida` | La variable no llega al contenedor: no está creada, está solo como variable de *build*, o el valor se pegó mal | Crear las variables de §2 como **Runtime** y volver a desplegar. El contenedor anterior seguía sirviendo: es el comportamiento esperado, no hay datos en riesgo |
+| El contenedor no arranca y dice `ERROR` | Variables faltantes o inválidas | Corregir en Coolify (§2). El mensaje lista **todos** los problemas a la vez |
+| Aviso de Coolify «the healthcheck needs a curl or wget command» | Aviso genérico para despliegues con Dockerfile | Ignorarlo: el `HEALTHCHECK` de esta imagen usa `node`, que sí existe. Solo falla si el contenedor no arranca |
 | `/api/health` devuelve 503 | Archivo de datos ilegible o corrupto, o permisos | Ver los registros: `DATA_CORRUPTION` o `PERSISTENCE` y el motivo. **No borres el archivo**: restáuralo desde una copia (§6) |
 | No se puede iniciar sesión | Sitio servido sin HTTPS, o contraseña/hash distintos | Usar HTTPS; regenerar el hash |
 | Te pide iniciar sesión tras cada despliegue | Las sesiones están en memoria | Es lo esperado; vuelve a entrar |

@@ -23,6 +23,9 @@
 # ideas of Design
 /ideas
 
+# error Logs in Deploy
+/logs
+
 # misc
 .DS_Store
 *.pem
