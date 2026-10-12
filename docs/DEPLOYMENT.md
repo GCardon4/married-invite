@@ -95,6 +95,10 @@ El contenedor cambia el dueño del directorio de datos al usuario `node` (un vol
 
 Si el paso 5 falla, el volumen no está montado en `/app/data`.
 
+### Qué mantiene vivos los enlaces
+
+Los enlaces no caducan con el tiempo. Lo que sí los pierde es perder el archivo de datos: sin `/app/data/guests.json` no hay hashes con los que reconocer los enlaces ya enviados. Por eso importan el volumen persistente en `/app/data` y las copias de seguridad de abajo. Evita además usar el botón **WhatsApp** o «Regenerar enlace» sobre invitados que ya recibieron su enlace: genera uno nuevo e invalida el anterior.
+
 ## 6. Copias de seguridad
 
 El volumen es un único disco en un único servidor: si se pierde, se pierden las respuestas. Haz copias **fuera del VPS**.

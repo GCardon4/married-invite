@@ -58,7 +58,7 @@ export function FloralArch({ children }: { children: ReactNode }) {
     <div
       // A todo el ancho: la imagen original está recortada en sus bordes, y así las flores sangran por los
       // lados de la pantalla en vez de cortarse en seco. Por encima de 1600 px se difuminan los extremos.
-      className="relative mx-auto w-full max-w-[1600px] min-[1600px]:[mask-image:linear-gradient(to_right,transparent,black_6%,black_94%,transparent)]"
+      className="relative left-1/2 w-[130%] max-w-none -translate-x-1/2 sm:left-auto sm:mx-auto sm:w-full sm:max-w-[1600px] sm:translate-x-0 min-[1600px]:[mask-image:linear-gradient(to_right,transparent,black_6%,black_94%,transparent)]"
       style={{ aspectRatio: `${width} / ${height}` }}
     >
       <Image

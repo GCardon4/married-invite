@@ -260,6 +260,7 @@ Las reglas se implementan en `src/lib/validations.ts`. Decisiones de implementac
 - Su hash debe almacenarse en `tokenHash`.
 - El token original no debe persistirse.
 - Los hashes deben compararse de forma consistente.
+- **El enlace no caduca.** La invitación no guarda ninguna fecha de vencimiento y abrir el enlace o responder no depende del tiempo: sigue funcionando meses o años después, también tras la boda y tras reiniciar el servidor (`tests/link-durability.test.ts`). Solo deja de funcionar si se **regenera** el token o se **elimina** la invitación.
 - Al regenerar el token, se reemplaza el hash anterior y el enlace previo deja de ser válido.
 - El token no debe incluirse en logs ni mensajes de error.
 

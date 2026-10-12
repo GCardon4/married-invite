@@ -6,10 +6,10 @@ La invitación pública busca tus archivos en `public/` y los muestra sola. No h
 
 | Archivo | Qué es | Dónde se ve |
 |---|---|---|
-| `public/images/hero.jpg` | Foto principal de los novios | Dentro del arco de flores, en la portada |
+| `public/images/main.jpg` | **Foto principal de los novios** (la que usa el proyecto) | Dentro del arco de flores, en la portada. `hero.*` también vale; si existen ambas, gana `main` |
 | `public/images/galeria/*.jpg` | Fotos de la galería (hasta 12, en orden alfabético) | Sección «Nuestra celebración» |
 | `public/videos/invitacion.mp4` | Video de los novios | Sección «Nuestra historia», con controles |
-| `public/images/video-poster.jpg` | Portada del video (opcional) | Antes de pulsar «play». Si no existe, usa `hero` |
+| `public/images/video-poster.jpg` | Portada del video (opcional) | Antes de pulsar «play». Si no existe, usa la foto principal |
 
 - **Formatos de imagen:** `.jpg`, `.jpeg`, `.png`, `.webp` y `.avif`. Los nombres no distinguen mayúsculas.
 - **Formatos de video:** `.mp4` (el que reproducen todos los teléfonos) y, opcionalmente, `.webm` con el mismo nombre.
@@ -22,7 +22,7 @@ Tus invitados abrirán el enlace desde WhatsApp, casi siempre con datos móviles
 
 | Archivo | Recomendación |
 |---|---|
-| Foto principal | Vertical (proporción 4:5), unos 900 × 1125 px, menos de 400 KB |
+| Foto principal | La foto actual (`main.jpg`, 640 × 640) funciona, pero se ve ampliada en pantallas de alta densidad: con 900 px o más de lado se ve más nítida. Se recorta en forma de arco (más alta que ancha), así que deja a las personas hacia el centro. Menos de 400 KB |
 | Fotos de galería | Hasta 1600 px de lado, menos de 300 KB cada una |
 | Video | 1080p o menos, 30–60 s, menos de 15 MB |
 

@@ -6,7 +6,8 @@ import { EVENT } from "@/lib/event";
 /**
  * Fotos y videos de los novios. Se descubren en `public/` con estas convenciones (docs/MEDIA.md):
  *
- *   public/images/hero.(jpg|jpeg|png|webp|avif)       foto principal, dentro del arco
+ *   public/images/main.(jpg|jpeg|png|webp|avif)       foto principal, dentro del arco
+ *                                                     (`hero.*` también vale; si existen ambas, gana `main`)
  *   public/images/video-poster.(…)                    portada del video (opcional)
  *   public/images/galeria/*.(jpg|jpeg|png|webp|avif)  galería, por orden alfabético
  *   public/videos/invitacion.(mp4|webm)               video de los novios
@@ -64,7 +65,7 @@ export async function discoverMedia(
     filesIn(path.join(publicDir, "videos")),
   ]);
 
-  const hero = findImage(images, "hero");
+  const hero = findImage(images, "main") ?? findImage(images, "hero");
   const poster = findImage(images, "video-poster");
 
   const sources = videos

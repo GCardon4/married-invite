@@ -91,7 +91,7 @@ function ArchCenter({ hero }: { hero: string | null }) {
           alt={`${EVENT.partner1} y ${EVENT.partner2}`}
           fill
           priority
-          sizes="(min-width: 1100px) 360px, 33vw"
+          sizes="(min-width: 1024px) 440px, (min-width: 640px) 480px, 70vw"
           className="object-cover"
         />
       ) : (

@@ -31,6 +31,22 @@ describe("discoverMedia", () => {
     expect(await discoverMedia(dir)).toEqual(NO_MEDIA);
   });
 
+  it("la foto principal es main.* (la que usa el proyecto) y también sirve de portada del video", async () => {
+    const media = await discoverMedia(await publicDir(["images/main.jpg", "videos/invitacion.mp4"]));
+    expect(media.hero).toBe("/images/main.jpg");
+    expect(media.videoPoster).toBe("/images/main.jpg");
+  });
+
+  it("si existen main.* y hero.*, gana main; hero.* sigue valiendo si no hay main", async () => {
+    expect((await discoverMedia(await publicDir(["images/hero.png", "images/main.webp"]))).hero).toBe("/images/main.webp");
+    expect((await discoverMedia(await publicDir(["images/hero.png"]))).hero).toBe("/images/hero.png");
+  });
+
+  it("en este repositorio, la foto principal es public/images/main.jpg y se descubre", async () => {
+    const media = await discoverMedia(path.resolve(__dirname, "../public"));
+    expect(media.hero).toBe("/images/main.jpg");
+  });
+
   it("encuentra la foto principal, el video y su portada", async () => {
     const dir = await publicDir(["images/hero.jpg", "images/video-poster.webp", "videos/invitacion.mp4", "videos/invitacion.webm"]);
     const media = await discoverMedia(dir);

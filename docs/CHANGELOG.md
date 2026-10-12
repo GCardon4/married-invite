@@ -1,5 +1,33 @@
 # Registro de cambios
 
+## `public/images/main.jpg` como foto principal — 2026-10-15
+
+### Cambiado
+- La foto principal de la invitación es `public/images/main.jpg` (la de Katheryn y Edwin). Antes la página buscaba `hero.*`, así que esa foto no se estaba usando. `hero.*` sigue valiendo como alternativa; si existen ambas, gana `main`. Es también la portada del video, si lo hay.
+- La foto se descargaba a **128 px** en el móvil para mostrarse a 144×214 (ampliada y borrosa): el tamaño solicitado se calculaba por el ancho, pero en un marco vertical manda el alto. Ahora pide el tamaño real (273 px para 278 de alto; en pantallas de alta densidad, hasta el máximo de la foto).
+- En pantallas pequeñas el arco es un 30 % más ancho que la pantalla, de modo que el hueco —y la foto— pasan de 144×214 a 187×278 px y las flores siguen sangrando por los lados.
+
+### Pruebas
+- 3 pruebas nuevas (433 en total): `main` gana a `hero`, `hero` sigue valiendo, y en este repositorio `public/images/main.jpg` se descubre como foto principal.
+
+### Notas
+- `main.jpg` mide 640×640 px. En teléfonos de alta densidad (2–3×) se verá algo ampliada; con una versión de 900 px o más de lado quedaría más nítida. El código no necesita cambios para eso: basta reemplazar el archivo.
+- La foto no se modificó.
+
+## Garantía: los enlaces de invitación no caducan — 2026-10-15
+
+### Verificado y protegido
+- Un enlace de invitación **no tiene caducidad**: el modelo de datos no guarda ninguna fecha de vencimiento y abrir el enlace solo compara el hash del token con los guardados. Se comprobó con el reloj avanzado y reiniciando el servidor: sigue abriéndose y permitiendo responder a los 3 meses, a los 6, el día de la boda, 3 meses después de la boda, al año y a los 3 años.
+- Solo deja de funcionar si el administrador **regenera** el enlace (incluido el botón WhatsApp sobre un invitado que ya tenía uno) o **elimina** la invitación.
+- `tests/link-durability.test.ts` (10 pruebas, 430 en total) protege la garantía: si alguien añade una caducidad al modelo o al flujo del enlace, fallan.
+
+### Documentado
+- `docs/DATA_MODEL.md` §8 (Token): el enlace no caduca y cuándo se invalida.
+- `docs/DEPLOYMENT.md`: lo que mantiene vivos los enlaces (volumen persistente y copias de seguridad) y la advertencia sobre regenerar.
+
+### Decisión
+- Se consideró añadir una fecha de vencimiento de 3 meses o más, y hacer que reenviar por WhatsApp no invalide el enlace anterior (requiere derivar el token de un secreto del servidor, un cambio de arquitectura). Se decidió **no** hacer ninguno: el requisito era la garantía de duración, que ya se cumplía.
+
 ## Texto y botón de WhatsApp en `#d3367b`, y nuevo mensaje — 2026-10-12
 
 ### Cambiado
