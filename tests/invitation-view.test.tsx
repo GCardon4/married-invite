@@ -13,6 +13,11 @@ const base: PublicInvitation = {
   status: "pending",
 };
 
+/** Imágenes decorativas (las flores): alt vacío. */
+const decorativeImages = (html: string) => (html.match(/<img[^>]*>/g) ?? []).filter((tag) => tag.includes('alt=""'));
+/** Imágenes de contenido (las fotos de los novios): con texto alternativo. */
+const contentImages = (html: string) => (html.match(/<img[^>]*>/g) ?? []).filter((tag) => /\balt="[^"]+"/.test(tag));
+
 const render = (invitation: PublicInvitation) =>
   renderToStaticMarkup(<InvitationView invitation={invitation} token={"t".repeat(43)} />);
 
@@ -104,9 +109,10 @@ describe("InvitationView: saludo, medios y decoración floral", () => {
     }
   });
 
-  it("sin fotos ni videos usa el arco floral con las iniciales, sin imágenes rotas", () => {
+  it("sin fotos ni videos muestra el arco floral con las iniciales y ninguna imagen de contenido", () => {
     const html = withMedia({});
-    expect(html).not.toContain("<img");
+    expect(contentImages(html)).toEqual([]);
+    expect(html).toMatch(/>K<\/span>[\s\S]*>E<\/span>/); // iniciales de los novios en el hueco del arco
     expect(html).not.toContain("<video");
     expect(html).not.toContain("Nuestra celebración");
     expect(html).not.toContain("Nuestra historia");
@@ -139,8 +145,8 @@ describe("InvitationView: saludo, medios y decoración floral", () => {
 
     expect(html).toContain("Nuestra celebración");
     for (const photo of gallery) expect(html).toContain(`alt="${photo.alt}"`);
-    expect((html.match(/<img/g) ?? []).length).toBe(3);
-    expect(html.match(/<img(?![^>]*\balt=)/g)).toBeNull();
+    expect(contentImages(html)).toHaveLength(3);
+    expect(html.match(/<img(?![^>]*\balt=)/g)).toBeNull(); // toda imagen declara su atributo alt
   });
 
   it("el botón de WhatsApp solo aparece si hay enlace configurado", () => {
@@ -155,17 +161,50 @@ describe("InvitationView: saludo, medios y decoración floral", () => {
     expect(render({ ...base, status: "confirmed", confirmedGuests: 2 })).toContain("Ver o cambiar mi respuesta");
   });
 
-  it("las flores son decorativas: ocultas a lectores de pantalla y sin foco", () => {
+  it("las flores son imágenes decorativas: sin texto alternativo, ocultas a lectores de pantalla y sin clics", () => {
     const html = render(base);
-    const svgs = html.match(/<svg[^>]*>/g) ?? [];
-    const decorative = svgs.filter((tag) => tag.includes('viewBox="0 0 320 320"') || tag.includes('viewBox="0 0 400 500"') || tag.includes('viewBox="0 0 320 44"') || tag.includes('viewBox="0 0 120 120"'));
+    const flowers = decorativeImages(html);
 
-    expect(decorative.length).toBeGreaterThanOrEqual(7); // 4 ramos + 2 ramitas + guirnalda + 2 divisores
-    for (const tag of decorative) {
+    // Arco + 2 ramos de fondo + 2 divisores (4 imágenes) + flores sueltas (saludo, itinerario, confirmación).
+    expect(flowers.length).toBeGreaterThanOrEqual(8);
+    for (const tag of flowers) {
       expect(tag).toContain('aria-hidden="true"');
-      expect(tag).toContain('focusable="false"');
+      expect(tag).toContain('alt=""');
+      expect(tag).toContain("pointer-events-none");
+      expect(tag).toContain('draggable="false"');
     }
     expect(html).toContain("pointer-events-none fixed inset-0");
+  });
+
+  it("usa las imágenes ligeras de public/images/flowers/web y no los originales de varios MB", () => {
+    const html = render(base);
+    // next/image sirve las imágenes por /_next/image?url=<ruta codificada>: se decodifica solo esa ruta.
+    const urls = (html.match(/url=([^&"\s]+)/g) ?? []).map((m) => decodeURIComponent(m.slice(4)));
+
+    for (const name of ["arch.webp", "flower-01.webp", "flower-02.webp", "flower-03.webp", "flower-04.webp"]) {
+      expect(urls, name).toContain(`/images/flowers/web/${name}`);
+    }
+    expect(urls.some((url) => url.endsWith(".png"))).toBe(false);
+    expect(urls.some((url) => url.includes("arch-flowers"))).toBe(false);
+  });
+
+  it("solo el arco se carga con prioridad; las demás flores se cargan de forma diferida", () => {
+    const tags = decorativeImages(render(base));
+    const arch = tags.find((tag) => decodeURIComponent(tag.match(/src="([^"]+)"/)?.[1] ?? "").includes("arch.webp"));
+
+    expect(arch).toBeDefined();
+    // Con `priority`, Next.js 16 quita `loading="lazy"` (carga inmediata) y precarga la imagen desde el <head>.
+    expect(arch).not.toContain('loading="lazy"');
+    const others = tags.filter((tag) => tag !== arch);
+    expect(others.length).toBeGreaterThan(5);
+    for (const tag of others) expect(tag, tag).toContain('loading="lazy"');
+  });
+
+  it("los nombres solo se anuncian una vez: el texto del arco y el de debajo se excluyen por tamaño de pantalla", () => {
+    const html = render(base);
+    expect(html.match(/<h1\b/g)).toHaveLength(2);
+    expect(html).toContain("hidden lg:block"); // dentro del arco, solo en pantallas grandes
+    expect(html).toContain("lg:hidden"); // debajo del arco, en el resto
   });
 
   it("incluye pétalos animados y el contenido se escapa también con medios", () => {

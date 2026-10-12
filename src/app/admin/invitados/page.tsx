@@ -8,6 +8,8 @@ import { requireAdminPage } from "@/lib/admin-page";
 import { ValidationError } from "@/lib/errors";
 import { formatDateTime } from "@/lib/format";
 import { getGuestService, type GuestListResult } from "@/lib/guest-service";
+import { whatsAppDisplayNumber } from "@/lib/whatsapp";
+import { WhatsAppSendButton } from "@/components/admin/whatsapp-send-button";
 
 const PAGE_SIZE = 25;
 
@@ -112,7 +114,7 @@ function GuestTable({
       <p className={cardClass}>
         {filtering ? "Ninguna invitación coincide con la búsqueda." : "Aún no hay invitaciones. "}
         {!filtering && (
-          <Link href="/admin/invitados/nuevo" className="font-semibold text-plum underline">
+          <Link href="/admin/invitados/nuevo" className="font-semibold text-primary underline">
             Crea la primera
           </Link>
         )}
@@ -126,8 +128,8 @@ function GuestTable({
         {result.total} {result.total === 1 ? "invitación" : "invitaciones"}
         {filtering ? " encontradas" : ""}
       </p>
-      <div className="overflow-x-auto rounded-2xl border border-plum/10 bg-card">
-        <table className="w-full min-w-[40rem] text-left text-sm">
+      <div className="overflow-x-auto rounded-2xl border border-primary/10 bg-card">
+        <table className="w-full min-w-[52rem] text-left text-sm">
           <caption className="sr-only">Invitaciones y su estado de respuesta</caption>
           <thead className="border-b border-ink/10 text-xs uppercase tracking-wider">
             <tr>
@@ -136,13 +138,14 @@ function GuestTable({
               <th scope="col" className="px-4 py-3">Estado</th>
               <th scope="col" className="px-4 py-3">Asistentes / cupo</th>
               <th scope="col" className="px-4 py-3">Respondió</th>
+              <th scope="col" className="px-4 py-3">Enviar invitación</th>
             </tr>
           </thead>
           <tbody>
             {result.items.map((guest) => (
               <tr key={guest.id} className="border-b border-ink/10 last:border-0 odd:bg-canvas hover:bg-peach/10">
                 <th scope="row" className="px-4 py-3 font-semibold">
-                  <Link href={`/admin/invitados/${guest.id}`} className="text-plum underline-offset-2 hover:underline">
+                  <Link href={`/admin/invitados/${guest.id}`} className="text-primary underline-offset-2 hover:underline">
                     {guest.name}
                   </Link>
                 </th>
@@ -159,6 +162,14 @@ function GuestTable({
                 <td className="px-4 py-3"><StatusBadge status={guest.status} /></td>
                 <td className="px-4 py-3">{guest.confirmedGuests} / {guest.allowedGuests}</td>
                 <td className="px-4 py-3">{formatDateTime(guest.respondedAt)}</td>
+                <td className="px-4 py-3">
+                  <WhatsAppSendButton
+                    guestId={guest.id}
+                    guestName={guest.name}
+                    phoneDisplay={whatsAppDisplayNumber(guest.phone)}
+                    compact
+                  />
+                </td>
               </tr>
             ))}
           </tbody>

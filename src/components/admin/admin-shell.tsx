@@ -10,7 +10,7 @@ export function AdminShell({ title, children }: { title: string; children: React
         <Suspense fallback={<div className="h-10" aria-hidden="true" />}>
           <AdminNav />
         </Suspense>
-        <h1 className="font-display text-3xl font-semibold text-plum-deep sm:text-4xl">{title}</h1>
+        <h1 className="font-display text-3xl font-semibold text-primary-deep sm:text-4xl">{title}</h1>
       </header>
       <main>{children}</main>
     </div>
@@ -19,7 +19,7 @@ export function AdminShell({ title, children }: { title: string; children: React
 
 export function PanelLoading() {
   return (
-    <p role="status" aria-busy="true" className="py-10 text-center font-display text-lg text-plum">
+    <p role="status" aria-busy="true" className="py-10 text-center font-display text-lg text-primary">
       Cargando…
     </p>
   );

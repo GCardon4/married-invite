@@ -1,5 +1,47 @@
 # Registro de cambios
 
+## Nuevo diseño: color principal `#d3367b` y flores de `public/images/flowers` — 2026-10-12
+
+### Cambiado
+- **Color principal `#d3367b`** (magenta) en toda la aplicación, invitación y panel. Los tokens `plum` y `fuchsia` pasan a `primary`, con `primary-strong` (`#b02a68`, hover y texto pequeño) y `primary-deep` (`#841544`, nombres). El texto blanco sobre el principal cumple AA (4,6:1) y el texto pequeño usa el tono fuerte (6:1 o más). `docs/DESIGN.md` actualizado.
+- **La decoración usa tus imágenes** en lugar de las flores dibujadas con SVG, que se eliminaron. `arch-flowers` abre la página como arco principal y encierra la foto de los novios (o su monograma) con los nombres debajo; en pantallas grandes los nombres van dentro del arco. Los 4 ramos sueltos adornan las esquinas del fondo y los bordes del saludo, el itinerario y la confirmación.
+- En escritorio el arco ocupa todo el ancho para que las flores sangren por los bordes de la pantalla en vez de cortarse en seco; por encima de 1600 px los extremos se difuminan.
+
+### Agregado
+- `npm run prepare-flowers` (`scripts/prepare-flowers.mjs`): genera en `public/images/flowers/web/` versiones `.webp` con transparencia. El arco original tenía **fondo blanco real** y pesaba 4,7 MB; la versión web pesa ~0,5 MB y el optimizador entrega ~60 KB a un móvil. El recorte quita el halo blanco de los bordes y conserva los pétalos claros. **No modifica los originales.**
+- `sharp` como dependencia de desarrollo (antes solo llegaba de forma indirecta con Next.js).
+- 24 pruebas nuevas (416 en total): existencia, transparencia, peso y proporciones de las imágenes; color principal y contrastes WCAG; decoración oculta a lectores de pantalla; solo el arco se carga con prioridad.
+
+### Corregido
+- **Bloqueo de archivo en Windows.** Al crear `guests.json.lock` justo después de que otro proceso lo borrara, Windows devolvía `EPERM`/`EACCES`/`EBUSY` (el archivo queda «pendiente de eliminar») en lugar de `EEXIST`, y la operación fallaba como un error de almacenamiento. Aparecía solo bajo carga (una prueba falló 2 de 5 corridas). Ahora es contención transitoria: se reintenta hasta 1 s, y un permiso realmente denegado sigue fallando con su código. También se reintenta soltar el bloqueo. No afecta a Linux/Docker. 5 pruebas de regresión, que fallan sin la corrección.
+- Legibilidad: la flor de la confirmación tapaba texto y el pie se perdía sobre las flores del fondo.
+
+### Notas
+- Tu servidor `npm run dev` debe **reiniciarse**: su compilador de Tailwind conserva los nombres de color anteriores y mostraría el texto en gris y los bordes en negro hasta entonces. Con `npm run build` los colores salen correctos.
+- Los originales de `public/images/flowers/*.png` (~8 MB) siguen siendo públicos y viajan en la imagen de Docker aunque la página no los use (ver `docs/MEDIA.md`).
+
+### Sin verificar
+- El comportamiento en la imagen de Docker real (sí se comprobó que `sharp` queda dentro del servidor `standalone` y sirve las flores).
+- El panel autenticado con el nuevo color (se comprobó la pantalla de inicio de sesión y los contrastes; no se recorrió con una sesión iniciada).
+
+## Enviar invitaciones por WhatsApp desde el panel — 2026-10-12
+
+### Agregado
+- Botón **WhatsApp** en el dashboard (pendientes de respuesta), en el listado de invitados y en el detalle de cada invitado. Abre WhatsApp con el mensaje y el enlace personal listos para enviar al teléfono guardado, sin copiar nada.
+- Al crear una invitación y al regenerar su enlace, el panel del enlace incluye «Enviar por WhatsApp». Sin teléfono utilizable, explica qué falta.
+- `src/lib/whatsapp.ts`: normalización del teléfono (prefijo `+`/`00`, 10 dígitos con código por defecto, código ya incluido) y mensaje. Es conservadora: ante cualquier duda (letras, extensiones, longitudes ambiguas) no genera enlace en vez de adivinar.
+- `POST /api/admin/invitados` y `POST /api/admin/invitados/[id]/enlace` devuelven `whatsappUrl` (o `null`).
+- Variable opcional `WHATSAPP_DEFAULT_COUNTRY_CODE` (por defecto `57`).
+- 55 pruebas nuevas (392 en total): normalización de teléfonos, URL y mensaje (con nombres maliciosos), respuestas de la API y la interfaz.
+
+### Decisiones
+- El enlace de una invitación existente **no se puede recuperar** (solo se guarda su hash, por seguridad). Por eso, enviar desde el dashboard o el listado **genera un enlace nuevo** y el anterior deja de funcionar; el botón pide confirmación y lo explica. No se cambió el modelo de datos.
+- No se envía nada automáticamente: el administrador abre WhatsApp y pulsa enviar. La ventana se abre con un clic en el último paso para que el navegador no la bloquee.
+
+### Sin verificar
+- La interfaz del botón en un navegador con una sesión de administrador iniciada (las pruebas la renderizan, pero no se recorrió el flujo completo).
+- Cómo se abre `wa.me` en el teléfono o escritorio del administrador (depende de que tenga WhatsApp instalado o WhatsApp Web).
+
 ## Primer despliegue en Coolify — 2026-10-12
 
 ### Observado en el primer despliegue (`logs/errorDeploy.log`)

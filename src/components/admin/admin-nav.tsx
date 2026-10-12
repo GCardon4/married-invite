@@ -36,7 +36,7 @@ export function AdminNav() {
             href={link.href}
             aria-current={active ? "page" : undefined}
             className={`rounded-full px-4 py-2 text-sm font-semibold transition-colors ${focusRing} ${
-              active ? "bg-plum text-white" : "hover:bg-plum/10"
+              active ? "bg-primary text-white" : "hover:bg-primary/10"
             }`}
           >
             {link.label}

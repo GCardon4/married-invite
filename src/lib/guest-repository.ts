@@ -39,6 +39,13 @@ const RENAME_ATTEMPTS = 5;
 const LOCK_WAIT_MS = 10_000;
 /** Un bloqueo más antiguo que esto lo dejó un proceso que murió; las operaciones duran milisegundos. */
 const LOCK_STALE_MS = 30_000;
+/**
+ * En Windows, crear el bloqueo justo después de que otro proceso lo borre falla con EPERM/EACCES/EBUSY
+ * (el archivo queda «pendiente de eliminar» unos milisegundos) en lugar de EEXIST. Es contención
+ * transitoria, no un error de almacenamiento. Un permiso realmente denegado persiste y acaba fallando.
+ */
+const LOCK_TRANSIENT_CODES = ["EPERM", "EACCES", "EBUSY"];
+const LOCK_TRANSIENT_MS = 1_000;
 
 export interface FileGuestRepositoryOptions {
   lockWaitMs?: number;
@@ -173,13 +180,13 @@ export class FileGuestRepository implements GuestRepository {
     try {
       return await operation();
     } finally {
-      // Si falla el borrado, el bloqueo caduca solo (LOCK_STALE_MS).
-      await unlink(this.lockPath).catch(() => undefined);
+      await this.releaseLock();
     }
   }
 
   private async acquireLock(): Promise<void> {
     const deadline = Date.now() + this.lockWaitMs;
+    let transientUntil: number | null = null;
 
     for (let attempt = 1; ; attempt++) {
       try {
@@ -192,7 +199,15 @@ export class FileGuestRepository implements GuestRepository {
         }
         return;
       } catch (error) {
-        if (errnoCode(error) !== "EEXIST") throw new PersistenceError(error);
+        const code = errnoCode(error);
+        if (code !== "EEXIST") {
+          if (!code || !LOCK_TRANSIENT_CODES.includes(code)) throw new PersistenceError(error);
+          // Contención transitoria (Windows): se reintenta un instante; si persiste, es un error real.
+          transientUntil ??= Date.now() + LOCK_TRANSIENT_MS;
+          if (Date.now() >= transientUntil) throw new PersistenceError(error);
+        } else {
+          transientUntil = null;
+        }
       }
 
       if (await this.removeIfStale()) continue;
@@ -200,6 +215,21 @@ export class FileGuestRepository implements GuestRepository {
         throw new PersistenceError(new Error("file-lock-timeout"));
       }
       await sleep(Math.min(250, 10 * attempt) + Math.floor(Math.random() * 15));
+    }
+  }
+
+  /** Suelta el bloqueo. Si no puede borrarlo, caduca solo (LOCK_STALE_MS), pero antes se reintenta. */
+  private async releaseLock(): Promise<void> {
+    for (let attempt = 1; attempt <= RENAME_ATTEMPTS; attempt++) {
+      try {
+        await unlink(this.lockPath);
+        return;
+      } catch (error) {
+        const code = errnoCode(error);
+        if (code === "ENOENT") return;
+        if (!code || !RENAME_RETRYABLE.includes(code)) return;
+        await sleep(20 * attempt);
+      }
     }
   }
 

@@ -8,16 +8,17 @@ import type { AdminGuest } from "@/types/guest";
 
 import { ConfirmDialog } from "./confirm-dialog";
 import { LinkPanel } from "./link-panel";
+import { WhatsAppSendButton } from "./whatsapp-send-button";
 import { buttonDanger, buttonSecondary, cardClass } from "./ui";
 
 type Pending = "regenerate" | "delete" | null;
 
-export function GuestActions({ guest }: { guest: AdminGuest }) {
+export function GuestActions({ guest, phoneDisplay }: { guest: AdminGuest; phoneDisplay: string | null }) {
   const router = useRouter();
   const [pending, setPending] = useState<Pending>(null);
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const [link, setLink] = useState<string | null>(null);
+  const [generated, setGenerated] = useState<GuestWithLink | null>(null);
 
   const base = `/api/admin/invitados/${encodeURIComponent(guest.id)}`;
 
@@ -37,7 +38,7 @@ export function GuestActions({ guest }: { guest: AdminGuest }) {
       setError(result.message);
       return;
     }
-    setLink(result.data.link);
+    setGenerated(result.data);
     router.refresh();
   }
 
@@ -59,7 +60,7 @@ export function GuestActions({ guest }: { guest: AdminGuest }) {
 
   return (
     <section aria-labelledby="enlace-titulo" className={`${cardClass} space-y-4`}>
-      <h2 id="enlace-titulo" className="font-display text-2xl font-semibold text-plum">
+      <h2 id="enlace-titulo" className="font-display text-2xl font-semibold text-primary">
         Enlace y eliminación
       </h2>
       <p className="text-sm">
@@ -67,7 +68,9 @@ export function GuestActions({ guest }: { guest: AdminGuest }) {
         que puedas copiar, regenéralo: el enlace anterior dejará de funcionar de inmediato.
       </p>
 
-      {link && <LinkPanel link={link} title="Nuevo enlace de la invitación" />}
+      {generated && (
+        <LinkPanel link={generated.link} title="Nuevo enlace de la invitación" whatsappUrl={generated.whatsappUrl} />
+      )}
 
       {error && (
         <p role="alert" className="rounded-xl bg-error/10 p-3 text-sm font-medium text-error">
@@ -76,6 +79,7 @@ export function GuestActions({ guest }: { guest: AdminGuest }) {
       )}
 
       <div className="flex flex-wrap gap-2">
+        <WhatsAppSendButton guestId={guest.id} guestName={guest.name} phoneDisplay={phoneDisplay} />
         <button type="button" onClick={() => setPending("regenerate")} className={buttonSecondary}>
           Regenerar enlace
         </button>

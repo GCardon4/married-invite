@@ -7,18 +7,21 @@ import { peopleLabel } from "@/lib/rsvp";
 import type { PublicInvitation } from "@/types/guest";
 
 import { Countdown } from "./countdown";
-import { ArchWreath, CardSprig, FloralBackdrop, FloralDivider } from "./flora";
+import { Flower, FloralArch, FloralBackdrop, FloralDivider } from "./flora";
 import { RsvpForm } from "./rsvp-form";
 
 const CARD =
-  "relative rounded-3xl border border-plum/10 bg-card/95 shadow-[0_12px_32px_-6px_rgba(74,90,77,0.12),0_4px_12px_-2px_rgba(163,48,91,0.06)]";
+  "relative rounded-3xl border border-primary/15 bg-card/95 shadow-[0_12px_32px_-6px_rgba(74,90,77,0.12),0_4px_12px_-2px_rgba(211,54,123,0.08)]";
 
 const BUTTON_OUTLINE =
-  "inline-flex items-center justify-center gap-2 rounded-[10px] border-[1.5px] border-ink px-5 py-3 text-sm font-semibold text-ink transition-colors hover:bg-ink/10 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-plum";
+  "inline-flex items-center justify-center gap-2 rounded-[10px] border-[1.5px] border-ink px-5 py-3 text-sm font-semibold text-ink transition-colors hover:bg-ink/10 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary";
 
 function SectionTitle({ id, children }: { id: string; children: ReactNode }) {
   return (
-    <h2 id={id} className="mx-auto mb-3 w-fit rounded-full bg-card/80 px-6 py-1 text-center font-display text-3xl font-semibold text-plum backdrop-blur-sm">
+    <h2
+      id={id}
+      className="mx-auto mb-3 w-fit rounded-full bg-card/80 px-6 py-1 text-center font-display text-3xl font-semibold text-primary backdrop-blur-sm"
+    >
       {children}
     </h2>
   );
@@ -65,12 +68,12 @@ function EventCard({
 }) {
   return (
     <li className={`${CARD} flex items-start gap-4 p-5`}>
-      <span className="flex size-12 shrink-0 items-center justify-center rounded-full bg-peach/30 text-plum">
+      <span className="flex size-12 shrink-0 items-center justify-center rounded-full bg-primary/10 text-primary">
         <Icon />
       </span>
       <div>
-        <p className="text-xs font-semibold uppercase tracking-wider text-tangerine-text">{time}</p>
-        <h3 className="font-display text-xl font-semibold text-plum">{title}</h3>
+        <p className="text-xs font-semibold uppercase tracking-wider text-primary-strong">{time}</p>
+        <h3 className="font-display text-xl font-semibold text-primary">{title}</h3>
         <p className="mt-1 font-semibold">{place}</p>
         <p className="text-sm">{detail}</p>
       </div>
@@ -78,36 +81,41 @@ function EventCard({
   );
 }
 
-function HeroArch({ hero }: { hero: string | null }) {
+/** Lo que va dentro del hueco del arco: la foto de los novios o, sin foto, su monograma. */
+function ArchCenter({ hero }: { hero: string | null }) {
   return (
-    <div className="relative mx-auto aspect-[4/5] w-full max-w-[22rem] sm:max-w-sm">
-      {/* Marco en arco; la guirnalda va encima y lo rodea. */}
-      <div className="absolute inset-x-[8%] bottom-[5%] top-[9%] overflow-hidden rounded-b-3xl rounded-t-[999px] bg-gradient-to-b from-peach/40 via-card to-blush/70 shadow-[0_16px_40px_-8px_rgba(74,90,77,0.25)] ring-[1.5px] ring-[#e0b674]/55">
-        {hero ? (
-          <Image
-            src={hero}
-            alt={`${EVENT.partner1} y ${EVENT.partner2}`}
-            fill
-            priority
-            sizes="(max-width: 640px) 80vw, 320px"
-            className="object-cover"
-          />
-        ) : (
-          <div className="flex h-full flex-col items-center justify-center gap-2 pt-10 text-center">
-            <p className="font-display text-6xl font-semibold leading-none text-plum" aria-hidden="true">
-              {EVENT.partner1[0]}
-            </p>
-            <p className="font-display text-3xl italic text-tangerine-text" aria-hidden="true">
-              &amp;
-            </p>
-            <p className="font-display text-6xl font-semibold leading-none text-plum" aria-hidden="true">
-              {EVENT.partner2[0]}
-            </p>
-          </div>
-        )}
-      </div>
-      <ArchWreath className="pointer-events-none absolute inset-0 z-10 h-full w-full" />
+    <div className="relative h-full max-h-full w-full max-w-[86%] overflow-hidden rounded-t-[999px] rounded-b-2xl lg:h-[58%] lg:w-auto lg:max-w-none lg:aspect-[3/4] bg-gradient-to-b from-primary/10 via-card to-primary/15 shadow-[0_10px_28px_-6px_rgba(74,90,77,0.3)] ring-[1.5px] ring-[#e0b674]/60">
+      {hero ? (
+        <Image
+          src={hero}
+          alt={`${EVENT.partner1} y ${EVENT.partner2}`}
+          fill
+          priority
+          sizes="(min-width: 1100px) 360px, 33vw"
+          className="object-cover"
+        />
+      ) : (
+        <div className="flex h-full flex-col items-center justify-center text-center" aria-hidden="true">
+          <span className="font-display text-4xl font-semibold leading-none text-primary sm:text-7xl">{EVENT.partner1[0]}</span>
+          <span className="font-display text-xl italic text-primary-deep sm:text-4xl">&amp;</span>
+          <span className="font-display text-4xl font-semibold leading-none text-primary sm:text-7xl">{EVENT.partner2[0]}</span>
+        </div>
+      )}
     </div>
+  );
+}
+
+/** Nombres y fecha. Se muestra dentro del arco en pantallas grandes y debajo en el resto. */
+function HeroText({ className }: { className: string }) {
+  return (
+    <section aria-label="Los novios" className={`text-center ${className}`}>
+      <p className="text-xs font-semibold uppercase tracking-[0.25em] text-primary-strong">Nos casamos</p>
+      <h1 className="mt-2 font-display text-[2.5rem] font-semibold leading-tight tracking-tight text-primary-deep lg:text-5xl">
+        {EVENT.partner1} <span className="font-normal italic text-primary">&amp;</span> {EVENT.partner2}
+      </h1>
+      <p className="mt-3 font-semibold">{EVENT.dateLabel}</p>
+      <p className="text-sm">{EVENT.timeZoneLabel}</p>
+    </section>
   );
 }
 
@@ -126,24 +134,27 @@ export function InvitationView({
   const passLabel = invitation.allowedGuests > 1 ? `Pase para ${peopleLabel(invitation.allowedGuests)}` : "Pase individual";
 
   return (
-    <div className="relative isolate flex min-h-screen flex-1 flex-col">
+    <div className="relative isolate flex min-h-screen flex-1 flex-col overflow-x-clip">
       <FloralBackdrop />
 
-      <header className="flex items-center justify-center gap-3 px-4 pt-6">
-        <span className="h-px w-10 bg-gradient-to-r from-transparent to-plum/40" aria-hidden="true" />
-        <span className="font-display text-lg font-semibold tracking-wide text-plum">{EVENT.monogram}</span>
-        <span className="h-px w-10 bg-gradient-to-l from-transparent to-plum/40" aria-hidden="true" />
-      </header>
+      {/* Arco floral principal, pegado al borde superior */}
+      <FloralArch>
+        <ArchCenter hero={media.hero} />
+        {/* En pantallas grandes el hueco del arco es lo bastante ancho para los nombres */}
+        <HeroText className="hidden lg:block" />
+      </FloralArch>
 
-      <main className="mx-auto flex w-full max-w-xl flex-1 flex-col gap-10 px-4 pb-32 pt-6">
+      <main className="mx-auto flex w-full max-w-xl flex-1 flex-col gap-10 px-4 pb-32">
+        {/* Portada (en pantallas pequeñas, bajo el arco) */}
+        <HeroText className="-mt-2 sm:-mt-6 lg:hidden" />
+
         {/* Saludo personal */}
-        <section aria-labelledby="saludo" className={`${CARD} overflow-hidden px-7 pb-12 pt-8 text-center`}>
-          <CardSprig className="pointer-events-none absolute -left-2 -top-2 w-20 opacity-90" />
-          <CardSprig className="pointer-events-none absolute -bottom-2 -right-2 w-20 rotate-180 opacity-90" />
-          <span className="inline-flex items-center gap-1.5 rounded-full bg-plum/10 px-3 py-1 text-[11px] font-semibold uppercase tracking-wider text-plum">
+        <section aria-labelledby="saludo" className={`${CARD} px-7 pb-8 pt-8 text-center`}>
+          <Flower name="four" sizes="112px" className="absolute -left-6 -top-10 w-24 -rotate-12 sm:-left-10 sm:w-28" />
+          <span className="inline-flex items-center gap-1.5 rounded-full bg-primary/10 px-3 py-1 text-[11px] font-semibold uppercase tracking-wider text-primary-strong">
             <span aria-hidden="true">♥</span> {passLabel}
           </span>
-          <h2 id="saludo" className="mt-3 font-display text-3xl font-semibold leading-tight text-plum-deep">
+          <h2 id="saludo" className="mt-3 font-display text-3xl font-semibold leading-tight text-primary-deep">
             ¡Hola, <span className="break-words">{invitation.name}</span>!
           </h2>
           <p className="mx-auto mt-3 max-w-sm leading-7">
@@ -154,19 +165,6 @@ export function InvitationView({
           </p>
         </section>
 
-        {/* Portada */}
-        <section aria-label="Los novios" className="text-center">
-          <HeroArch hero={media.hero} />
-          <p className="mt-6 text-xs font-semibold uppercase tracking-[0.25em] text-fuchsia">Nos casamos</p>
-          <h1 className="mt-2 font-display text-[2.5rem] font-semibold leading-tight tracking-tight text-plum-deep sm:text-6xl">
-            {EVENT.partner1} <span className="font-normal italic text-tangerine-text">&amp;</span> {EVENT.partner2}
-          </h1>
-          <p className="mt-3 font-semibold">{EVENT.dateLabel}</p>
-          <p className="text-sm">{EVENT.timeZoneLabel}</p>
-        </section>
-
-        <FloralDivider className="mx-auto -my-4 h-auto w-full max-w-xs" />
-
         {/* Cuenta regresiva */}
         <section aria-labelledby="cuenta" className={`${CARD} p-5`}>
           <h2 id="cuenta" className="mb-3 text-center text-xs font-semibold uppercase tracking-wider">
@@ -175,8 +173,11 @@ export function InvitationView({
           <Countdown targetIso={EVENT.startsAtIso} />
         </section>
 
+        <FloralDivider className="-my-3" />
+
         {/* Itinerario */}
-        <section aria-labelledby="itinerario">
+        <section aria-labelledby="itinerario" className="relative">
+          <Flower name="two" sizes="150px" className="absolute -right-14 -top-16 z-10 w-28 rotate-6 sm:-right-24 sm:w-36" />
           <SectionTitle id="itinerario">Itinerario del día</SectionTitle>
           <ul className="space-y-3">
             <EventCard icon={ChurchIcon} {...EVENT.ceremony} />
@@ -186,22 +187,22 @@ export function InvitationView({
 
         {/* Cómo llegar */}
         <section aria-labelledby="llegar" className={`${CARD} overflow-hidden`}>
-          <div className="relative h-36 bg-gradient-to-br from-peach/30 via-card to-blush/60" aria-hidden="true">
+          <div className="relative h-36 bg-gradient-to-br from-primary/10 via-card to-primary/20" aria-hidden="true">
             <svg viewBox="0 0 400 144" className="absolute inset-0 h-full w-full" preserveAspectRatio="xMidYMid slice">
               <g fill="none" stroke="#4a5a4d" strokeOpacity={0.18} strokeWidth={6} strokeLinecap="round">
                 <path d="M-10 100 C 90 70 150 130 250 90 S 360 40 420 70" />
                 <path d="M60 -10 C 90 40 70 80 130 150" />
                 <path d="M250 -10 C 240 40 280 80 270 150" />
               </g>
-              <g fill="#a3305b" fillOpacity={0.9}>
+              <g fill="#d3367b" fillOpacity={0.95}>
                 <path d="M200 38 c-16 0 -28 12 -28 27 c0 22 28 44 28 44 s28 -22 28 -44 c0 -15 -12 -27 -28 -27 z" />
               </g>
               <circle cx="200" cy="65" r="9" fill="#fffdfa" />
             </svg>
           </div>
           <div className="p-6 text-center">
-            <h2 id="llegar" className="flex items-center justify-center gap-2 font-display text-2xl font-semibold text-plum">
-              <span className="text-tangerine-text">
+            <h2 id="llegar" className="flex items-center justify-center gap-2 font-display text-2xl font-semibold text-primary">
+              <span className="text-primary-strong">
                 <PinIcon />
               </span>
               ¿Cómo llegar?
@@ -249,7 +250,7 @@ export function InvitationView({
               {media.gallery.map((photo, index) => (
                 <li
                   key={photo.src}
-                  className={`relative overflow-hidden rounded-2xl shadow-md ring-1 ring-plum/10 ${
+                  className={`relative overflow-hidden rounded-2xl shadow-md ring-1 ring-primary/10 ${
                     index === 0 && media.gallery.length > 2 ? "col-span-2 aspect-[16/10]" : "aspect-[4/5]"
                   }`}
                 >
@@ -269,23 +270,24 @@ export function InvitationView({
         {/* Código de vestimenta (solo si está definido en EVENT.dressCode) */}
         {EVENT.dressCode && (
           <section aria-labelledby="vestimenta" className={`${CARD} p-6 text-center`}>
-            <h2 id="vestimenta" className="font-display text-2xl font-semibold text-plum">
+            <h2 id="vestimenta" className="font-display text-2xl font-semibold text-primary">
               Código de vestimenta
             </h2>
             <p className="mt-2 leading-7">{EVENT.dressCode}</p>
           </section>
         )}
 
-        <FloralDivider className="mx-auto -my-4 h-auto w-full max-w-xs" />
+        <FloralDivider className="-my-3" />
 
         {/* Confirmación */}
-        <div id="rsvp" className="scroll-mt-6">
+        <div id="rsvp" className="relative scroll-mt-6">
+          <Flower name="one" sizes="150px" className="absolute -right-6 -top-24 z-10 w-28 sm:-right-20 sm:-top-28 sm:w-36" />
           <RsvpForm token={token} initial={invitation} />
         </div>
 
-        <footer className="text-center">
-          <p className="font-display text-xl italic text-plum">Con cariño,</p>
-          <p className="font-display text-2xl font-semibold text-plum-deep">
+        <footer className="mx-auto w-fit rounded-2xl bg-card/80 px-8 py-3 text-center backdrop-blur-sm">
+          <p className="font-display text-xl italic text-primary">Con cariño,</p>
+          <p className="font-display text-2xl font-semibold text-primary-deep">
             {EVENT.partner1} &amp; {EVENT.partner2}
           </p>
         </footer>
@@ -294,12 +296,12 @@ export function InvitationView({
       {/* Acciones siempre a mano en el teléfono */}
       <nav
         aria-label="Acciones rápidas"
-        className="fixed inset-x-0 bottom-0 z-30 border-t border-plum/10 bg-card/90 px-4 py-3 backdrop-blur-md"
+        className="fixed inset-x-0 bottom-0 z-30 border-t border-primary/15 bg-card/90 px-4 py-3 backdrop-blur-md"
       >
         <div className="mx-auto flex max-w-xl gap-2">
           <a
             href="#rsvp"
-            className="flex-1 rounded-[10px] bg-plum px-4 py-3 text-center text-sm font-semibold text-white transition-colors hover:bg-fuchsia focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-plum"
+            className="flex-1 rounded-[10px] bg-primary px-4 py-3 text-center text-sm font-semibold text-white transition-colors hover:bg-primary-strong focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary"
           >
             {pending ? "Confirmar mi asistencia" : "Ver o cambiar mi respuesta"}
           </a>

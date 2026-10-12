@@ -16,15 +16,21 @@ import { makeGuest, makeTempDir, newDataFile, readRaw, tempFilesIn } from "./hel
 
 vi.mock("node:fs/promises", async (importOriginal) => {
   const actual = await importOriginal<typeof import("node:fs/promises")>();
-  return { ...actual, default: actual, rename: vi.fn(actual.rename) };
+  return { ...actual, default: actual, rename: vi.fn(actual.rename), open: vi.fn(actual.open), unlink: vi.fn(actual.unlink) };
 });
 
 const renameMock = vi.mocked(fsp.rename);
+const openMock = vi.mocked(fsp.open);
+const unlinkMock = vi.mocked(fsp.unlink);
 
 beforeEach(async () => {
   const actual = await vi.importActual<typeof import("node:fs/promises")>("node:fs/promises");
   renameMock.mockReset();
   renameMock.mockImplementation(actual.rename);
+  openMock.mockReset();
+  openMock.mockImplementation(actual.open);
+  unlinkMock.mockReset();
+  unlinkMock.mockImplementation(actual.unlink);
   vi.spyOn(console, "error").mockImplementation(() => undefined);
 });
 
@@ -384,5 +390,69 @@ describe("concurrencia", () => {
 
     await expect(failing).rejects.toThrow("falla del updater");
     expect((await next).name).toBe("Después");
+  });
+});
+
+describe("bloqueo de archivo: contención transitoria de Windows", () => {
+  // Windows devuelve EPERM/EACCES/EBUSY (no EEXIST) al crear el bloqueo justo después de que otro
+  // proceso lo borre, porque el archivo queda «pendiente de eliminar» unos milisegundos.
+  it.each([["EPERM"], ["EACCES"], ["EBUSY"]])("%s al crear el bloqueo se reintenta y la operación termina bien", async (code) => {
+    const file = await newDataFile();
+    const repo = new FileGuestRepository(file);
+    openMock.mockRejectedValueOnce(errno(code));
+
+    const guest = makeGuest();
+    await repo.create(guest);
+
+    expect(await repo.list()).toEqual([guest]);
+    expect(await tempFilesIn(file)).toEqual([]);
+    await expect(fsp.stat(`${file}.lock`)).rejects.toMatchObject({ code: "ENOENT" });
+  });
+
+  it("varios fallos transitorios seguidos tampoco hacen fallar la operación", async () => {
+    const file = await newDataFile();
+    const repo = new FileGuestRepository(file);
+    openMock.mockRejectedValueOnce(errno("EPERM")).mockRejectedValueOnce(errno("EPERM")).mockRejectedValueOnce(errno("EBUSY"));
+
+    await repo.create(makeGuest());
+    expect(await repo.list()).toHaveLength(1);
+  });
+
+  it("si el permiso se deniega de verdad (persiste), falla sin escribir y deja el código para diagnosticarlo", async () => {
+    const file = await newDataFile();
+    const repo = new FileGuestRepository(file);
+    await repo.create(makeGuest());
+    const before = await readRaw(file);
+    openMock.mockRejectedValue(errno("EACCES"));
+
+    const started = Date.now();
+    await expect(repo.create(makeGuest())).rejects.toBeInstanceOf(PersistenceError);
+
+    expect(Date.now() - started).toBeLessThan(4_000); // no espera los 10 s del bloqueo ajeno
+    expect(await readRaw(file)).toBe(before);
+    expect(console.error).toHaveBeenCalledWith(expect.stringContaining("PERSISTENCE (EACCES)"));
+  });
+
+  it("un error que no es de contención (EIO) falla de inmediato", async () => {
+    const repo = new FileGuestRepository(await newDataFile());
+    openMock.mockRejectedValue(errno("EIO"));
+
+    const started = Date.now();
+    await expect(repo.create(makeGuest())).rejects.toBeInstanceOf(PersistenceError);
+    expect(Date.now() - started).toBeLessThan(500);
+  });
+
+  it("si no puede soltar el bloqueo a la primera, lo reintenta y no lo deja atrás", async () => {
+    const file = await newDataFile();
+    const repo = new FileGuestRepository(file);
+    unlinkMock.mockRejectedValueOnce(errno("EPERM")).mockRejectedValueOnce(errno("EBUSY"));
+
+    await repo.create(makeGuest());
+
+    await expect(fsp.stat(`${file}.lock`)).rejects.toMatchObject({ code: "ENOENT" });
+    // La siguiente operación no tiene que esperar a que el bloqueo caduque.
+    const started = Date.now();
+    await repo.create(makeGuest());
+    expect(Date.now() - started).toBeLessThan(1_000);
   });
 });

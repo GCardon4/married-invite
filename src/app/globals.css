@@ -5,9 +5,12 @@
   --canvas: #faf7f5;
   --card: #fffdfa;
   --ink: #4a5a4d;
-  --plum: #a3305b;
-  --plum-deep: #841544;
-  --fuchsia: #d3367b;
+  /* Color principal de la marca: magenta. */
+  --primary: #d3367b;
+  /* Tono más oscuro del principal: hover de botones y texto pequeño (contraste ≥ 6:1 sobre crema). */
+  --primary-strong: #b02a68;
+  /* Burdeos: nombres y titulares destacados. */
+  --primary-deep: #841544;
   --tangerine: #ff6a1e;
   --peach: #fe9b7b;
   --error: #ba1a1a;
@@ -17,9 +20,9 @@
   --color-canvas: var(--canvas);
   --color-card: var(--card);
   --color-ink: var(--ink);
-  --color-plum: var(--plum);
-  --color-plum-deep: var(--plum-deep);
-  --color-fuchsia: var(--fuchsia);
+  --color-primary: var(--primary);
+  --color-primary-strong: var(--primary-strong);
+  --color-primary-deep: var(--primary-deep);
   --color-tangerine: var(--tangerine);
   --color-peach: var(--peach);
   --color-error: var(--error);

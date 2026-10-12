@@ -24,6 +24,7 @@ Se definen en Coolify (Environment Variables) y se reciben **solo en tiempo de e
 | `SESSION_SECRET` | Sí | Al menos 32 caracteres aleatorios |
 | `APP_BASE_URL` | Recomendada | `https://tu-dominio` (HTTPS) |
 | `DATA_FILE_PATH` | No | Ya es `/app/data/guests.json` en la imagen |
+| `WHATSAPP_DEFAULT_COUNTRY_CODE` | No | Código de país que se antepone a los teléfonos de 10 dígitos al enviar por WhatsApp (por defecto `57`) |
 | `WHATSAPP_NUMBER` | No | Número con código de país y solo dígitos (p. ej. `573001234567`). Activa el botón de WhatsApp |
 
 Genera los valores en tu equipo, no en el servidor:

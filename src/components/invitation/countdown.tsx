@@ -23,7 +23,7 @@ export function Countdown({ targetIso }: { targetIso: string }) {
 
   if (left?.done) {
     return (
-      <p className="font-display text-xl font-semibold text-plum" role="status">
+      <p className="font-display text-xl font-semibold text-primary" role="status">
         ¡Hoy celebramos! Gracias por ser parte de este día.
       </p>
     );
@@ -42,10 +42,10 @@ export function Countdown({ targetIso }: { targetIso: string }) {
       <p className="sr-only">{left ? `Faltan ${left.days} días para la boda.` : "Cuenta regresiva para la boda."}</p>
       <div className="grid grid-cols-4 gap-2 text-center" aria-hidden="true">
         {cells.map(([label, value], index) => (
-          <div key={label} className="rounded-xl bg-card/90 px-1 py-2 shadow-sm ring-1 ring-plum/10">
+          <div key={label} className="rounded-xl bg-card/90 px-1 py-2 shadow-sm ring-1 ring-primary/10">
             <span
               className={`block font-display text-2xl font-semibold tabular-nums leading-tight sm:text-3xl ${
-                index === 3 ? "text-[#a53c00]" : "text-plum"
+                index === 3 ? "text-[#a53c00]" : "text-primary"
               }`}
             >
               {value ?? "––"}

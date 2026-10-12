@@ -55,10 +55,10 @@ export function RsvpForm({ token, initial }: { token: string; initial: PublicInv
     return (
       <section
         aria-labelledby={`${groupId}-title`}
-        className="rounded-3xl border border-plum/10 bg-card p-6 text-center shadow-[0_8px_24px_-4px_rgba(74,90,77,0.08)]"
+        className="rounded-3xl border border-primary/10 bg-card p-6 text-center shadow-[0_8px_24px_-4px_rgba(74,90,77,0.08)]"
       >
         <div role="status" aria-live="polite">
-          <h2 id={`${groupId}-title`} className="font-display text-2xl font-semibold text-plum">
+          <h2 id={`${groupId}-title`} className="font-display text-2xl font-semibold text-primary">
             {message.title}
           </h2>
           <p className="mt-3 leading-7">{message.body}</p>
@@ -71,7 +71,7 @@ export function RsvpForm({ token, initial }: { token: string; initial: PublicInv
             setError(null);
             setEditing(true);
           }}
-          className="mt-5 rounded-[10px] border-[1.5px] border-ink px-5 py-3 text-sm font-semibold text-ink transition-colors hover:bg-ink/10 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-plum"
+          className="mt-5 rounded-[10px] border-[1.5px] border-ink px-5 py-3 text-sm font-semibold text-ink transition-colors hover:bg-ink/10 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary"
         >
           Cambiar mi respuesta
         </button>
@@ -84,9 +84,9 @@ export function RsvpForm({ token, initial }: { token: string; initial: PublicInv
       onSubmit={onSubmit}
       noValidate
       aria-labelledby={`${groupId}-title`}
-      className="rounded-3xl border border-plum/10 bg-card p-6 shadow-[0_8px_24px_-4px_rgba(74,90,77,0.08)]"
+      className="rounded-3xl border border-primary/10 bg-card p-6 shadow-[0_8px_24px_-4px_rgba(74,90,77,0.08)]"
     >
-      <h2 id={`${groupId}-title`} className="font-display text-2xl font-semibold text-plum">
+      <h2 id={`${groupId}-title`} className="font-display text-2xl font-semibold text-primary">
         ¿Nos acompañas?
       </h2>
       <p className="mt-1 text-sm">
@@ -98,8 +98,8 @@ export function RsvpForm({ token, initial }: { token: string; initial: PublicInv
         {OPTIONS.map((option) => (
           <label
             key={option.value}
-            className={`block cursor-pointer rounded-2xl border-[1.5px] p-4 transition-colors has-[:focus-visible]:outline-2 has-[:focus-visible]:outline-offset-2 has-[:focus-visible]:outline-plum ${
-              choice === option.value ? "border-plum bg-plum/5" : "border-ink/25 hover:border-plum/50"
+            className={`block cursor-pointer rounded-2xl border-[1.5px] p-4 transition-colors has-[:focus-visible]:outline-2 has-[:focus-visible]:outline-offset-2 has-[:focus-visible]:outline-primary ${
+              choice === option.value ? "border-primary bg-primary/5" : "border-ink/25 hover:border-primary/50"
             }`}
           >
             <input
@@ -133,7 +133,7 @@ export function RsvpForm({ token, initial }: { token: string; initial: PublicInv
                 aria-label="Una persona menos"
                 disabled={submitting || count <= 1}
                 onClick={() => setCount((c) => Math.max(1, c - 1))}
-                className="size-11 rounded-full border-[1.5px] border-ink text-xl leading-none disabled:opacity-40 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-plum"
+                className="size-11 rounded-full border-[1.5px] border-ink text-xl leading-none disabled:opacity-40 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary"
               >
                 −
               </button>
@@ -145,7 +145,7 @@ export function RsvpForm({ token, initial }: { token: string; initial: PublicInv
                 aria-label="Una persona más"
                 disabled={submitting || count >= max}
                 onClick={() => setCount((c) => Math.min(max, c + 1))}
-                className="size-11 rounded-full border-[1.5px] border-ink text-xl leading-none disabled:opacity-40 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-plum"
+                className="size-11 rounded-full border-[1.5px] border-ink text-xl leading-none disabled:opacity-40 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary"
               >
                 +
               </button>
@@ -164,7 +164,7 @@ export function RsvpForm({ token, initial }: { token: string; initial: PublicInv
       <button
         type="submit"
         disabled={submitting}
-        className="mt-6 w-full rounded-[10px] bg-plum px-6 py-3 font-semibold text-white transition-colors hover:bg-fuchsia disabled:cursor-wait disabled:opacity-60 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-plum"
+        className="mt-6 w-full rounded-[10px] bg-primary px-6 py-3 font-semibold text-white transition-colors hover:bg-primary-strong disabled:cursor-wait disabled:opacity-60 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary"
       >
         {submitting ? "Enviando…" : "Enviar mi respuesta"}
       </button>

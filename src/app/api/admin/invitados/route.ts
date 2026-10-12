@@ -1,6 +1,7 @@
 import { buildInvitationLink, queryToObject, withAdmin } from "@/lib/admin-api";
 import { getGuestService } from "@/lib/guest-service";
 import { jsonResponse, readJsonBody } from "@/lib/http";
+import { buildInvitationWhatsAppUrl } from "@/lib/whatsapp";
 
 /** Lista y busca invitaciones: `search`, `status`, `page` y `limit`. */
 export function GET(request: Request) {
@@ -14,8 +15,9 @@ export function GET(request: Request) {
 export function POST(request: Request) {
   return withAdmin(request, { mutating: true }, async () => {
     const { guest, token } = await getGuestService().createGuest(await readJsonBody(request));
+    const link = buildInvitationLink(request, token);
     return jsonResponse(
-      { guest, token, link: buildInvitationLink(request, token) },
+      { guest, token, link, whatsappUrl: buildInvitationWhatsAppUrl(guest, link) },
       { status: 201 },
     );
   });

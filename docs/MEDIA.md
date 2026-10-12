@@ -52,6 +52,27 @@ npm run build && npm run start   # o: node .next/standalone/server.js
 - **Texto alternativo.** Las fotos de la galería llevan «Foto N de Katheryn y Edwin». No describen lo que aparece en cada foto; si lo necesitas, hay que ampliar el sistema.
 - **Sin subtítulos.** Si el video tiene voz y quieres accesibilidad completa, habría que añadir un archivo de subtítulos.
 
+## Flores de la decoración
+
+Las flores de la invitación están en `public/images/flowers/`:
+
+| Original | Uso |
+|---|---|
+| `arch-flowers.png` | Arco principal, en la parte superior de la invitación |
+| `flower-01.png` a `flower-04.png` | Ramos sueltos en las esquinas del fondo y los bordes de las secciones |
+
+Los originales no se muestran tal cual: el arco tiene **fondo blanco real** (sin transparencia) y pesa 4,7 MB. Para la web, `npm run prepare-flowers` genera en `public/images/flowers/web/` versiones `.webp` con fondo transparente y mucho más ligeras (el arco, ~0,5 MB; cada flor, 50–100 KB). **Es lo que usa la página.** El script no modifica tus originales.
+
+Si cambias o agregas una flor:
+
+1. Reemplaza el archivo original en `public/images/flowers/` (mismo nombre).
+2. Ejecuta `npm run prepare-flowers`.
+3. Sube también los `.webp` nuevos de `public/images/flowers/web/`.
+
+Para que el recorte del arco salga limpio, el fondo del original debe ser blanco puro. Las flores sueltas deben tener ya su fondo transparente. Si cambian las proporciones, actualiza los tamaños de `FLOWERS` en `src/components/invitation/flora.tsx` (una prueba avisa si no coinciden).
+
+Los originales siguen siendo públicos (`/images/flowers/arch-flowers.png`) aunque la página no los use, y viajan dentro de la imagen de Docker (~8 MB). Si no los necesitas en el sitio, puedes guardarlos fuera de `public/` (por ejemplo en una carpeta `assets-src/`) y apuntar `scripts/prepare-flowers.mjs` a ella.
+
 ## Otros datos de la invitación
 
 - **Datos del evento** (fecha, lugares, mapa): `src/lib/event.ts`.

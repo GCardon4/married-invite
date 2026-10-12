@@ -63,6 +63,7 @@ Abrir `http://localhost:3000`.
 | `npm run lint` | ESLint |
 | `npm run typecheck` | Comprobación de tipos con `tsc` |
 | `npm test` | Pruebas con Vitest |
+| `npm run prepare-flowers` | Genera las versiones web (transparentes y ligeras) de las flores |
 
 ## Primer uso
 
@@ -72,6 +73,10 @@ Abrir `http://localhost:3000`.
 4. `npm run dev` y abrir `http://localhost:3000/admin/login`.
 
 Las sesiones viven en memoria: reiniciar el servidor las cierra. Para pruebas en local hace falta `DATA_FILE_PATH` (por defecto `./data/guests.json`, que se crea sola si no existe).
+
+## Enviar invitaciones por WhatsApp
+
+En el panel, cada invitado con teléfono tiene un botón **WhatsApp**: abre WhatsApp con el mensaje y su enlace personal listos para enviar. Al crear una invitación el botón aparece junto al enlace; en el dashboard y el listado genera un enlace nuevo (el anterior deja de funcionar) y pide confirmación. El teléfono se interpreta según `WHATSAPP_DEFAULT_COUNTRY_CODE` (57 por defecto); sin un teléfono utilizable, el botón lleva a editar la invitación. Ver `docs/ARCHITECTURE.md` §6.3.
 
 ## Fotos y videos
 

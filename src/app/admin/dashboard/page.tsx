@@ -6,6 +6,8 @@ import { StatusBadge } from "@/components/admin/status-badge";
 import { buttonSecondary, cardClass } from "@/components/admin/ui";
 import { requireAdminPage } from "@/lib/admin-page";
 import { getGuestService } from "@/lib/guest-service";
+import { whatsAppDisplayNumber } from "@/lib/whatsapp";
+import { WhatsAppSendButton } from "@/components/admin/whatsapp-send-button";
 
 export default function DashboardPage() {
   return (
@@ -65,13 +67,13 @@ async function DashboardContent() {
           aria-valuenow={answeredPercent}
           className="mt-3 h-3 overflow-hidden rounded-full bg-ink/10"
         >
-          <div className="h-full bg-gradient-to-r from-plum to-tangerine" style={{ width: `${answeredPercent}%` }} />
+          <div className="h-full bg-gradient-to-r from-primary to-tangerine" style={{ width: `${answeredPercent}%` }} />
         </div>
       </section>
 
       <section aria-labelledby="pendientes">
         <div className="mb-3 flex flex-wrap items-center justify-between gap-2">
-          <h2 id="pendientes" className="font-display text-2xl font-semibold text-plum">
+          <h2 id="pendientes" className="font-display text-2xl font-semibold text-primary">
             Pendientes de respuesta
           </h2>
           <Link href="/admin/invitados?status=pending" className={buttonSecondary}>
@@ -88,17 +90,20 @@ async function DashboardContent() {
         ) : (
           <ul className="space-y-2">
             {pending.items.map((guest) => (
-              <li key={guest.id}>
-                <Link
-                  href={`/admin/invitados/${guest.id}`}
-                  className={`${cardClass} flex items-center justify-between gap-3 py-3 hover:border-plum/30`}
-                >
+              <li key={guest.id} className={`${cardClass} flex flex-wrap items-center justify-between gap-3 py-3`}>
+                <Link href={`/admin/invitados/${guest.id}`} className="min-w-0 flex-1 hover:underline">
                   <span className="font-semibold">{guest.name}</span>
-                  <span className="flex items-center gap-3">
-                    <span className="text-sm">Cupo: {guest.allowedGuests}</span>
-                    <StatusBadge status={guest.status} />
-                  </span>
+                  <span className="ml-3 text-sm">Cupo: {guest.allowedGuests}</span>
                 </Link>
+                <span className="flex items-center gap-3">
+                  <StatusBadge status={guest.status} />
+                  <WhatsAppSendButton
+                    guestId={guest.id}
+                    guestName={guest.name}
+                    phoneDisplay={whatsAppDisplayNumber(guest.phone)}
+                    compact
+                  />
+                </span>
               </li>
             ))}
           </ul>
@@ -121,7 +126,7 @@ function Stat({
   tone?: "pending" | "confirmed";
   large?: boolean;
 }) {
-  const accent = tone === "pending" ? "text-[#a03b1e]" : tone === "confirmed" ? "text-[#2f3a31]" : "text-plum";
+  const accent = tone === "pending" ? "text-[#a03b1e]" : tone === "confirmed" ? "text-[#2f3a31]" : "text-primary";
   return (
     <div className={cardClass}>
       <p className="text-xs font-semibold uppercase tracking-wider opacity-80">{label}</p>

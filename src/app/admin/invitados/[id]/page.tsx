@@ -11,6 +11,7 @@ import { requireAdminPage } from "@/lib/admin-page";
 import { NotFoundError, ValidationError } from "@/lib/errors";
 import { formatDateTime } from "@/lib/format";
 import { getGuestService } from "@/lib/guest-service";
+import { whatsAppDisplayNumber } from "@/lib/whatsapp";
 import type { AdminGuest } from "@/types/guest";
 
 export default function GuestDetailPage(props: PageProps<"/admin/invitados/[id]">) {
@@ -43,7 +44,7 @@ async function GuestDetailContent({ params }: { params: PageProps<"/admin/invita
       </Link>
 
       <section aria-labelledby="respuesta" className={cardClass}>
-        <h2 id="respuesta" className="font-display text-2xl font-semibold text-plum">
+        <h2 id="respuesta" className="font-display text-2xl font-semibold text-primary">
           {guest.name}
         </h2>
         <dl className="mt-4 grid gap-x-6 gap-y-3 text-sm sm:grid-cols-2">
@@ -58,13 +59,13 @@ async function GuestDetailContent({ params }: { params: PageProps<"/admin/invita
       </section>
 
       <section aria-labelledby="editar">
-        <h2 id="editar" className="mb-3 font-display text-2xl font-semibold text-plum">
+        <h2 id="editar" className="mb-3 font-display text-2xl font-semibold text-primary">
           Datos de la invitación
         </h2>
         <GuestForm guest={guest} />
       </section>
 
-      <GuestActions guest={guest} />
+      <GuestActions guest={guest} phoneDisplay={whatsAppDisplayNumber(guest.phone)} />
     </div>
   );
 }

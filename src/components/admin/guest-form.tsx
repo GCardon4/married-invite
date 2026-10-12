@@ -95,7 +95,7 @@ export function GuestForm({ guest }: { guest?: AdminGuest }) {
         <p role="status" className="rounded-xl bg-ink/10 p-3 text-sm font-semibold">
           Invitación creada para {created.guest.name}.
         </p>
-        <LinkPanel link={created.link} title="Enlace de la invitación" />
+        <LinkPanel link={created.link} title="Enlace de la invitación" whatsappUrl={created.whatsappUrl} />
         <div className="flex flex-wrap gap-2">
           <button
             type="button"

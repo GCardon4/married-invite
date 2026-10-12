@@ -4,7 +4,7 @@ import type { GuestStatus } from "@/types/guest";
 const STYLES: Record<GuestStatus, string> = {
   confirmed: "border-ink/25 bg-ink/10 text-[#2f3a31]",
   pending: "border-tangerine/30 bg-peach/20 text-[#a03b1e]",
-  declined: "border-fuchsia/25 bg-fuchsia/10 text-plum",
+  declined: "border-primary/25 bg-primary/10 text-primary",
 };
 
 /** El texto, no solo el color, comunica el estado. */

@@ -230,6 +230,7 @@ Las reglas se implementan en `src/lib/validations.ts`. Decisiones de implementac
 - Puede ser `null`.
 - Debe almacenarse como `string`, no como número, para conservar prefijos y ceros iniciales.
 - Si existe, debe limitarse a una longitud razonable.
+- Es texto libre (no se valida el formato al guardar). Solo para el envío por WhatsApp se interpreta así (`src/lib/whatsapp.ts`): con prefijo `+` o `00` se usa tal cual (8 a 15 dígitos); con exactamente 10 dígitos se antepone `WHATSAPP_DEFAULT_COUNTRY_CODE` (57 por defecto); si ya empieza por ese código y tiene 11 a 15 dígitos se acepta; en cualquier otro caso (letras, extensiones, longitudes ambiguas) **no se envía**, para no escribir a un número equivocado. No cambia lo que se almacena.
 
 ### Cupos
 

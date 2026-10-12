@@ -13,6 +13,8 @@ export interface GuestWithLink {
   guest: AdminGuest;
   token: string;
   link: string;
+  /** Enlace de WhatsApp listo para enviar, o `null` si el teléfono del invitado no es utilizable. */
+  whatsappUrl: string | null;
 }
 
 const NETWORK_MESSAGE =

@@ -12,6 +12,8 @@ export function ConfirmDialog({
   confirmLabel,
   danger = false,
   busy = false,
+  hideConfirm = false,
+  cancelLabel = "Cancelar",
   onConfirm,
   onCancel,
 }: {
@@ -21,6 +23,9 @@ export function ConfirmDialog({
   confirmLabel: string;
   danger?: boolean;
   busy?: boolean;
+  /** Para diálogos que solo informan (se muestra únicamente el botón de cerrar). */
+  hideConfirm?: boolean;
+  cancelLabel?: string;
   onConfirm: () => void;
   onCancel: () => void;
 }) {
@@ -42,19 +47,21 @@ export function ConfirmDialog({
         event.preventDefault();
         if (!busy) onCancel();
       }}
-      className="m-auto w-[min(92vw,28rem)] rounded-2xl border border-plum/10 bg-card p-6 text-ink shadow-xl backdrop:bg-ink/40 backdrop:backdrop-blur-sm"
+      className="m-auto w-[min(92vw,28rem)] rounded-2xl border border-primary/10 bg-card p-6 text-ink shadow-xl backdrop:bg-ink/40 backdrop:backdrop-blur-sm"
     >
-      <h2 id={`${id}-title`} className="font-display text-2xl font-semibold text-plum">
+      <h2 id={`${id}-title`} className="font-display text-2xl font-semibold text-primary">
         {title}
       </h2>
       <div className="mt-3 space-y-2 text-sm leading-6">{children}</div>
       <div className="mt-6 flex flex-col-reverse gap-2 sm:flex-row sm:justify-end">
         <button type="button" onClick={onCancel} disabled={busy} className={buttonSecondary}>
-          Cancelar
+          {cancelLabel}
         </button>
-        <button type="button" onClick={onConfirm} disabled={busy} className={danger ? buttonDanger : buttonPrimary}>
-          {busy ? "Procesando…" : confirmLabel}
-        </button>
+        {!hideConfirm && (
+          <button type="button" onClick={onConfirm} disabled={busy} className={danger ? buttonDanger : buttonPrimary}>
+            {busy ? "Procesando…" : confirmLabel}
+          </button>
+        )}
       </div>
     </dialog>
   );

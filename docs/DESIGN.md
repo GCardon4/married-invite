@@ -148,8 +148,10 @@ The emotional signature is celebratory, warm, and graceful. It avoids cold trans
 
 The palette directly reflects natural floral cascades:
 
-- **Primary (`#a3305b`)**: Deep plum/magenta. Used for high-emphasis interactive elements, structural buttons, primary brand marks, and prominent active navigation items.
-- **Accent Rose (`#d3367b`)**: Vibrant fuchsia. Serves as a dynamic highlight token for notification badges, interactive states, and RSVP confirmation states.
+- **Primary (`#d3367b`)**: Vibrant magenta, the main brand color. Used for high-emphasis interactive elements, buttons, headings, brand marks, and active navigation items. White text on it meets AA contrast (4.6:1).
+- **Primary strong (`#b02a68`)**: A darker magenta for button hover states and small text on light surfaces (6:1 or better).
+- **Primary deep (`#841544`)**: Burgundy, for the couple's names and other featured headings.
+- **Botanical imagery**: The floral artwork in `public/images/flowers/` (vintage watercolor roses in pink, wine and cream) supplies the pinks and greens around the primary magenta. The arch (`arch-flowers.png`) frames the top of the invitation; the four loose bouquets (`flower-01` to `flower-04`) decorate the page corners and section edges.
 - **Secondary (`#ff6a1e`)**: Warm tangerine orange. Used for secondary CTAs, key celebratory callouts, calendar badges, and celebratory moments.
 - **Tonal Peach (`#fe9b7b`)**: Soft petal peach. Employed for secondary button hover states, delicate pill badges, tag containers, and background highlights.
 - **Tertiary Botanical (`#4a5a4d`)**: Dark sage green. Forms the backbone of high-contrast readable typography, secondary icons, and structural divider accents, grounding the vibrant floral tones.
@@ -195,24 +197,24 @@ The design system implements a rounded aesthetic (Level 2) that mirrors soft arc
 ## Components
 
 ### Buttons
-- **Primary:** Background `#a3305b`, text `#ffffff`, border radius `10px`, padding `12px 24px`. Hover activates a subtle lift and background shift toward vibrant fuchsia `#d3367b`.
+- **Primary:** Background `#d3367b`, text `#ffffff`, border radius `10px`, padding `12px 24px`. Hover activates a subtle lift and background shift to the darker `#b02a68`.
 - **Secondary / RSVP Affirmative:** Background `#ff6a1e`, text `#ffffff`, radius `10px`. Hover transitions to `#e0550f`.
 - **Tertiary / Botanical:** Outlined with `1.5px solid #4a5a4d`, text `#4a5a4d`, background transparent. Hover reveals a soft sage wash `rgba(74, 90, 77, 0.08)`.
 
 ### Chips & Status Badges
 - **Confirmed Guest:** Background `rgba(74, 90, 77, 0.12)`, text `#2f3a31`, border `1px solid rgba(74, 90, 77, 0.25)`.
 - **Pending RSVP:** Background `rgba(254, 155, 123, 0.2)`, text `#a03b1e`, border `1px solid rgba(255, 106, 30, 0.3)`.
-- **Dietary / VIP:** Background `rgba(211, 54, 123, 0.1)`, text `#a3305b`, border `1px solid rgba(211, 54, 123, 0.25)`.
+- **Dietary / VIP:** Background `rgba(211, 54, 123, 0.1)`, text `#b02a68`, border `1px solid rgba(211, 54, 123, 0.25)`.
 - **Shape:** Pill-shaped (`rounded-full`) with `label-sm` uppercase tracking.
 
 ### Cards & Panels
 - Background `#fffdfa` with a subtle inset or perimeter stroke `1px solid rgba(163, 48, 91, 0.08)`.
 - Padding `space-lg` (`24px`).
-- Feature cards may incorporate a delicate dual gradient top accent line: `linear-gradient(90deg, #a3305b, #ff6a1e)`.
+- Feature cards may incorporate a delicate dual gradient top accent line: `linear-gradient(90deg, #d3367b, #ff6a1e)`.
 
 ### Input Fields & Controls
-- **Inputs:** Ivory fill (`#faf7f5`), border `1.5px solid rgba(74, 90, 77, 0.25)`, text `#4a5a4d`, radius `8px`. Active focus shifts border to `#a3305b` with a soft glow `box-shadow: 0 0 0 3px rgba(163, 48, 91, 0.15)`.
-- **Checkboxes & Radios:** Colored in `#a3305b` when checked. Unchecked state presents a botanical border `#4a5a4d`.
+- **Inputs:** Ivory fill (`#faf7f5`), border `1.5px solid rgba(74, 90, 77, 0.25)`, text `#4a5a4d`, radius `8px`. Active focus shifts border to `#d3367b` with a soft glow `box-shadow: 0 0 0 3px rgba(211, 54, 123, 0.15)`.
+- **Checkboxes & Radios:** Colored in `#d3367b` when checked. Unchecked state presents a botanical border `#4a5a4d`.
 
 ### Lists & Tables (Guest Tracker)
 - Striped with `#fffdfa` and `#faf7f5`.

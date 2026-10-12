@@ -696,3 +696,101 @@ describe("CRUD de invitados (con sesión)", () => {
     }
   });
 });
+
+// --- Envío por WhatsApp --------------------------------------------------------
+
+describe("envío por WhatsApp desde el panel", () => {
+  let cookie: string;
+
+  beforeEach(async () => {
+    cookie = await loginCookie();
+  });
+
+  const messageOf = (whatsappUrl: string) => new URL(whatsappUrl).searchParams.get("text") ?? "";
+
+  it("al crear con teléfono devuelve el enlace de WhatsApp con el número normalizado y el enlace de la invitación", async () => {
+    const body = await (await api.create({ name: "Ana Gómez", phone: "300 123 4567", allowedGuests: 2 }, { cookie })).json();
+    const url = new URL(body.whatsappUrl);
+
+    expect(url.origin + url.pathname).toBe("https://wa.me/573001234567");
+    expect(messageOf(body.whatsappUrl)).toContain(body.link);
+    expect(messageOf(body.whatsappUrl)).toContain("Ana Gómez");
+    expect(body.link).toBe(`https://boda.example.com/invitacion/${body.token}`);
+  });
+
+  it("acepta un teléfono con prefijo internacional", async () => {
+    const body = await (await api.create({ name: "Beto", phone: "+1 415 555 2671", allowedGuests: 1 }, { cookie })).json();
+    expect(new URL(body.whatsappUrl).pathname).toBe("/14155552671");
+  });
+
+  it.each([
+    ["sin teléfono", { name: "Carla", allowedGuests: 1 }],
+    ["con teléfono vacío", { name: "Carla", phone: "", allowedGuests: 1 }],
+    ["con un teléfono que no se puede interpretar", { name: "Carla", phone: "300123", allowedGuests: 1 }],
+    ["con un teléfono con letras", { name: "Carla", phone: "llamar a Carla", allowedGuests: 1 }],
+  ])("%s: crea la invitación igual y whatsappUrl es null", async (_name, input) => {
+    const response = await api.create(input, { cookie });
+    const body = await response.json();
+
+    expect(response.status).toBe(201);
+    expect(body.whatsappUrl).toBeNull();
+    expect(body.link).toContain("/invitacion/");
+  });
+
+  it("al regenerar el enlace, el mensaje lleva el enlace NUEVO y el anterior deja de funcionar", async () => {
+    const created = await (await api.create({ name: "Ana", phone: "3001234567", allowedGuests: 2 }, { cookie })).json();
+    const regenerated = await (await api.regenerate(created.guest.id, { cookie })).json();
+
+    expect(regenerated.token).not.toBe(created.token);
+    expect(messageOf(regenerated.whatsappUrl)).toContain(regenerated.link);
+    expect(messageOf(regenerated.whatsappUrl)).not.toContain(created.token);
+
+    const publicWith = (token: string) =>
+      publicGet(new Request(`${ORIGIN}/api/public/invitaciones/${token}`), { params: Promise.resolve({ token }) } as never);
+    expect((await publicWith(created.token)).status).toBe(404);
+    expect((await publicWith(regenerated.token)).status).toBe(200);
+  });
+
+  it("regenerar sin teléfono utilizable devuelve whatsappUrl null y el enlace nuevo igualmente", async () => {
+    const { guest } = await seed("Sin teléfono", 2);
+    await api.patch(guest.id, { phone: "" }, { cookie });
+
+    const body = await (await api.regenerate(guest.id, { cookie })).json();
+    expect(body.whatsappUrl).toBeNull();
+    expect(body.link).toContain(body.token);
+  });
+
+  it("usa WHATSAPP_DEFAULT_COUNTRY_CODE para los números de 10 dígitos", async () => {
+    vi.stubEnv("WHATSAPP_DEFAULT_COUNTRY_CODE", "52");
+    const body = await (await api.create({ name: "Dora", phone: "5512345678", allowedGuests: 1 }, { cookie })).json();
+    expect(new URL(body.whatsappUrl).pathname).toBe("/525512345678");
+  });
+
+  it("el mensaje contiene el enlace pero nunca el hash del token", async () => {
+    const body = await (await api.create({ name: "Eva", phone: "3001234567", allowedGuests: 1 }, { cookie })).json();
+    const stored = JSON.parse(await readRaw(file)).guests.at(-1).tokenHash as string;
+
+    expect(body.whatsappUrl).not.toContain(stored);
+    expect(decodeURIComponent(body.whatsappUrl)).not.toContain(stored);
+  });
+
+  it("un nombre malicioso no puede alterar el destino ni añadir parámetros al enlace de WhatsApp", async () => {
+    const evil = "Eva&phone=999999999&text=x #";
+    const body = await (await api.create({ name: evil, phone: "3001234567", allowedGuests: 1 }, { cookie })).json();
+    const url = new URL(body.whatsappUrl);
+
+    expect(url.hostname).toBe("wa.me");
+    expect(url.pathname).toBe("/573001234567");
+    expect([...url.searchParams.keys()]).toEqual(["text"]);
+  });
+
+  it("los endpoints siguen exigiendo sesión: sin ella no se genera ningún enlace de WhatsApp", async () => {
+    const { guest } = await seed("Frida", 2);
+    const before = await readRaw(file);
+
+    const response = await api.regenerate(guest.id);
+    expect(response.status).toBe(401);
+    expect(await response.text()).not.toContain("wa.me");
+    expect(await readRaw(file)).toBe(before);
+  });
+});
