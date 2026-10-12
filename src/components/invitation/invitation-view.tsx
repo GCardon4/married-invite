@@ -14,7 +14,7 @@ const CARD =
   "relative rounded-3xl border border-primary/15 bg-card/95 shadow-[0_12px_32px_-6px_rgba(74,90,77,0.12),0_4px_12px_-2px_rgba(211,54,123,0.08)]";
 
 const BUTTON_OUTLINE =
-  "inline-flex items-center justify-center gap-2 rounded-[10px] border-[1.5px] border-ink px-5 py-3 text-sm font-semibold text-ink transition-colors hover:bg-ink/10 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary";
+  "inline-flex items-center justify-center gap-2 rounded-[10px] border-[1.5px] border-primary px-5 py-3 text-sm font-semibold text-primary transition-colors hover:bg-primary/10 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary";
 
 function SectionTitle({ id, children }: { id: string; children: ReactNode }) {
   return (
@@ -72,7 +72,7 @@ function EventCard({
         <Icon />
       </span>
       <div>
-        <p className="text-xs font-semibold uppercase tracking-wider text-primary-strong">{time}</p>
+        <p className="text-xs font-semibold uppercase tracking-wider text-primary">{time}</p>
         <h3 className="font-display text-xl font-semibold text-primary">{title}</h3>
         <p className="mt-1 font-semibold">{place}</p>
         <p className="text-sm">{detail}</p>
@@ -97,7 +97,7 @@ function ArchCenter({ hero }: { hero: string | null }) {
       ) : (
         <div className="flex h-full flex-col items-center justify-center text-center" aria-hidden="true">
           <span className="font-display text-4xl font-semibold leading-none text-primary sm:text-7xl">{EVENT.partner1[0]}</span>
-          <span className="font-display text-xl italic text-primary-deep sm:text-4xl">&amp;</span>
+          <span className="font-display text-xl italic text-primary sm:text-4xl">&amp;</span>
           <span className="font-display text-4xl font-semibold leading-none text-primary sm:text-7xl">{EVENT.partner2[0]}</span>
         </div>
       )}
@@ -108,9 +108,9 @@ function ArchCenter({ hero }: { hero: string | null }) {
 /** Nombres y fecha. Se muestra dentro del arco en pantallas grandes y debajo en el resto. */
 function HeroText({ className }: { className: string }) {
   return (
-    <section aria-label="Los novios" className={`text-center ${className}`}>
-      <p className="text-xs font-semibold uppercase tracking-[0.25em] text-primary-strong">Nos casamos</p>
-      <h1 className="mt-2 font-display text-[2.5rem] font-semibold leading-tight tracking-tight text-primary-deep lg:text-5xl">
+    <section aria-label="Los novios" className={`mx-auto w-fit max-w-full rounded-2xl bg-card/80 px-5 py-3 text-center backdrop-blur-sm ${className}`}>
+      <p className="text-xs font-semibold uppercase tracking-[0.25em] text-primary">Nos casamos</p>
+      <h1 className="mt-2 font-display text-[2.1rem] font-semibold leading-tight tracking-tight text-primary min-[420px]:text-[2.5rem] lg:text-5xl">
         {EVENT.partner1} <span className="font-normal italic text-primary">&amp;</span> {EVENT.partner2}
       </h1>
       <p className="mt-3 font-semibold">{EVENT.dateLabel}</p>
@@ -151,10 +151,10 @@ export function InvitationView({
         {/* Saludo personal */}
         <section aria-labelledby="saludo" className={`${CARD} px-7 pb-8 pt-8 text-center`}>
           <Flower name="four" sizes="112px" className="absolute -left-6 -top-10 w-24 -rotate-12 sm:-left-10 sm:w-28" />
-          <span className="inline-flex items-center gap-1.5 rounded-full bg-primary/10 px-3 py-1 text-[11px] font-semibold uppercase tracking-wider text-primary-strong">
+          <span className="inline-flex items-center gap-1.5 rounded-full bg-primary/10 px-3 py-1 text-[11px] font-semibold uppercase tracking-wider text-primary">
             <span aria-hidden="true">♥</span> {passLabel}
           </span>
-          <h2 id="saludo" className="mt-3 font-display text-3xl font-semibold leading-tight text-primary-deep">
+          <h2 id="saludo" className="mt-3 font-display text-3xl font-semibold leading-tight text-primary">
             ¡Hola, <span className="break-words">{invitation.name}</span>!
           </h2>
           <p className="mx-auto mt-3 max-w-sm leading-7">
@@ -202,7 +202,7 @@ export function InvitationView({
           </div>
           <div className="p-6 text-center">
             <h2 id="llegar" className="flex items-center justify-center gap-2 font-display text-2xl font-semibold text-primary">
-              <span className="text-primary-strong">
+              <span className="text-primary">
                 <PinIcon />
               </span>
               ¿Cómo llegar?
@@ -287,7 +287,7 @@ export function InvitationView({
 
         <footer className="mx-auto w-fit rounded-2xl bg-card/80 px-8 py-3 text-center backdrop-blur-sm">
           <p className="font-display text-xl italic text-primary">Con cariño,</p>
-          <p className="font-display text-2xl font-semibold text-primary-deep">
+          <p className="font-display text-2xl font-semibold text-primary">
             {EVENT.partner1} &amp; {EVENT.partner2}
           </p>
         </footer>

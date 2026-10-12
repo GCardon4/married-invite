@@ -78,7 +78,6 @@ describe("color principal #d3367b", () => {
     expect(css).toMatch(/--primary:\s*#d3367b;/i);
     expect(css).toContain("--color-primary: var(--primary);");
     expect(css).toContain("--color-primary-strong: var(--primary-strong);");
-    expect(css).toContain("--color-primary-deep: var(--primary-deep);");
   });
 
   it("no quedan restos de los nombres de color anteriores (plum, fuchsia) en el código", async () => {
@@ -105,11 +104,44 @@ describe("color principal #d3367b", () => {
     expect(contrast("#ffffff", "#b02a68")).toBeGreaterThanOrEqual(6); // hover de botones
   });
 
-  it("los nombres en burdeos sobre la tarjeta cumplen AAA", () => {
-    expect(contrast("#841544", "#fffdfa")).toBeGreaterThanOrEqual(7);
+  it("el texto en el color principal sobre la tarjeta crema cumple AA (4,5:1)", () => {
+    expect(contrast("#d3367b", "#fffdfa")).toBeGreaterThanOrEqual(4.5);
+    expect(contrast("#d3367b", "#ffffff")).toBeGreaterThanOrEqual(4.5);
   });
 
-  it("el color principal sobre la tarjeta cumple AA para texto grande y de interfaz (3:1)", () => {
-    expect(contrast("#d3367b", "#fffdfa")).toBeGreaterThanOrEqual(3);
+  it("sobre el fondo de la página no llega a AA (por eso el texto pequeño va sobre tarjetas): el límite se documenta aquí", () => {
+    // Si alguien cambia el fondo o el color y esto deja de ser cierto, hay que revisar dónde se apoya el texto.
+    const onCanvas = contrast("#d3367b", "#faf7f5");
+    expect(onCanvas).toBeGreaterThan(3); // vale para texto grande y de interfaz
+    expect(onCanvas).toBeLessThan(4.5);
+  });
+
+  it("el texto por defecto de la página es el color principal", async () => {
+    const css = await readFile(path.join(ROOT, "src/app/globals.css"), "utf8");
+    expect(css).toMatch(/body\s*\{[^}]*color:\s*var\(--primary\)/);
+  });
+
+  it("ya no se usan el gris verdoso ni el burdeos como color de texto", async () => {
+    const offenders: string[] = [];
+    const walk = async (dir: string) => {
+      for (const entry of await readdir(dir, { withFileTypes: true })) {
+        const full = path.join(dir, entry.name);
+        if (entry.isDirectory()) await walk(full);
+        else if (/\.(tsx?|css)$/.test(entry.name) && /text-ink|primary-deep|text-primary-strong/.test(await readFile(full, "utf8"))) {
+          offenders.push(path.relative(ROOT, full));
+        }
+      }
+    };
+    await walk(path.join(ROOT, "src"));
+    expect(offenders).toEqual([]);
+  });
+
+  it("el botón de WhatsApp del panel es del color principal", async () => {
+    const { buttonWhatsApp, buttonPrimary } = await import("@/components/admin/ui");
+    expect(buttonWhatsApp).toContain("bg-primary");
+    expect(buttonWhatsApp).toContain("text-white");
+    expect(buttonWhatsApp).toContain("hover:bg-primary-strong");
+    expect(buttonWhatsApp).not.toMatch(/#[0-9a-f]{6}/i); // sin colores sueltos: usa los tokens
+    expect(buttonPrimary).toContain("bg-primary");
   });
 });

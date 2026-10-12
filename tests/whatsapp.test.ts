@@ -94,12 +94,17 @@ describe("whatsAppDisplayNumber", () => {
 describe("buildInvitationMessage / buildInvitationWhatsAppUrl", () => {
   const link = "https://boda.example.com/invitacion/ABCdef123_-";
 
-  it("el mensaje saluda por el nombre, informa del evento e incluye el enlace", () => {
-    const message = buildInvitationMessage("Familia Pérez", link);
-    expect(message).toContain("¡Hola, Familia Pérez!");
-    expect(message).toContain("Katheryn y Edwin");
-    expect(message).toContain("viernes 8 de enero de 2027");
+  it("el mensaje es exactamente el acordado, con el nombre y el enlace con el token al final", () => {
+    expect(buildInvitationMessage("Familia Pérez", link)).toBe(
+      `Hola Familia Pérez, queremos hacerte oficialmente la invitación a nuestra boda, haz clic en el enlace para que veas tu invitación: ${link}`,
+    );
+  });
+
+  it("el mensaje va en una sola línea y el enlace queda al final, sin nada detrás que lo rompa", () => {
+    const message = buildInvitationMessage("Ana", link);
+    expect(message).not.toContain("\n");
     expect(message.endsWith(link)).toBe(true);
+    expect(message.trim()).toBe(message);
   });
 
   it("la URL abre WhatsApp con el número normalizado y el mensaje codificado", () => {

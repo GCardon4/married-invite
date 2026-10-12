@@ -129,9 +129,9 @@ function Stat({
   const accent = tone === "pending" ? "text-[#a03b1e]" : tone === "confirmed" ? "text-[#2f3a31]" : "text-primary";
   return (
     <div className={cardClass}>
-      <p className="text-xs font-semibold uppercase tracking-wider opacity-80">{label}</p>
+      <p className="text-xs font-semibold uppercase tracking-wider">{label}</p>
       <p className={`mt-1 font-display font-semibold ${accent} ${large ? "text-5xl" : "text-4xl"}`}>{value}</p>
-      {note && <p className="mt-1 text-xs opacity-80">{note}</p>}
+      {note && <p className="mt-1 text-xs">{note}</p>}
     </div>
   );
 }

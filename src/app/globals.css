@@ -4,13 +4,12 @@
 :root {
   --canvas: #faf7f5;
   --card: #fffdfa;
+  /* Verde salvia: ya no se usa para texto, solo para bordes y fondos tenues. */
   --ink: #4a5a4d;
   /* Color principal de la marca: magenta. */
   --primary: #d3367b;
   /* Tono más oscuro del principal: hover de botones y texto pequeño (contraste ≥ 6:1 sobre crema). */
   --primary-strong: #b02a68;
-  /* Burdeos: nombres y titulares destacados. */
-  --primary-deep: #841544;
   --tangerine: #ff6a1e;
   --peach: #fe9b7b;
   --error: #ba1a1a;
@@ -22,7 +21,6 @@
   --color-ink: var(--ink);
   --color-primary: var(--primary);
   --color-primary-strong: var(--primary-strong);
-  --color-primary-deep: var(--primary-deep);
   --color-tangerine: var(--tangerine);
   --color-peach: var(--peach);
   --color-error: var(--error);
@@ -32,7 +30,9 @@
 
 body {
   background: var(--canvas);
-  color: var(--ink);
+  /* El texto va en el color principal. Sobre las tarjetas crema da 4,5:1 (AA); sobre el fondo de la
+     página, 4,3:1: por eso el texto pequeño nunca se deja suelto sobre el fondo, siempre sobre una tarjeta. */
+  color: var(--primary);
   font-family: var(--font-jakarta), ui-sans-serif, system-ui, sans-serif;
 }
 

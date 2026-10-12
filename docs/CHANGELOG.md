@@ -1,5 +1,31 @@
 # Registro de cambios
 
+## Texto y botón de WhatsApp en `#d3367b`, y nuevo mensaje — 2026-10-12
+
+### Cambiado
+- **Todo el texto va en el color principal `#d3367b`** (antes gris verdoso, burdeos o tonos distintos): párrafos, títulos, nombres, etiquetas y los bordes de los botones de contorno. El color por defecto de la página es el principal. Los colores de estado (confirmada, pendiente, error) se conservan porque comunican significado.
+- **El botón de WhatsApp del panel es del color principal**, igual que el resto de acciones destacadas.
+- **Mensaje de WhatsApp** (texto acordado): «Hola {nombre}, queremos hacerte oficialmente la invitación a nuestra boda, haz clic en el enlace para que veas tu invitación: {enlace con el token}». Va en una sola línea con el enlace al final, dentro de `https://wa.me/<número>?text=…`.
+- Se eliminó el token `primary-deep` (burdeos), que ya no se usa.
+- Los textos secundarios que usaban opacidad (`opacity-80`) ya no la usan: con el color principal, atenuarlos los dejaría por debajo del contraste AA.
+- Nombres y fecha de la portada sobre una base suave de tarjeta, y nombres algo menores en pantallas pequeñas para que quepan en una línea.
+
+### Contraste (medido, WCAG)
+| Texto `#d3367b` sobre… | Contraste | AA texto normal (4,5) |
+|---|---|---|
+| Tarjeta crema `#fffdfa` | 4,51:1 | Cumple, por muy poco |
+| Blanco | 4,58:1 | Cumple |
+| Fondo de la página `#faf7f5` | 4,30:1 | **No cumple** |
+| Zonas rosadas del fondo | 3,6–4,0:1 | **No cumple** (sí para texto grande, 3:1) |
+
+Por eso el texto pequeño va siempre sobre una tarjeta o una base translúcida. Si quieres más margen en cualquier texto, el tono `#b02a68` (`primary-strong`) da 6,1:1.
+
+### Pruebas
+- 4 pruebas nuevas (420 en total): mensaje exacto, una sola línea, texto por defecto en el color principal, ausencia de colores de texto anteriores y botón de WhatsApp del color principal. Una prueba documenta el límite de contraste sobre el fondo de la página.
+
+### Sin verificar
+- El panel de administración autenticado con el texto en magenta (tablas y formularios). Solo se comprobó la pantalla de inicio de sesión y el botón de WhatsApp por pruebas.
+
 ## Nuevo diseño: color principal `#d3367b` y flores de `public/images/flowers` — 2026-10-12
 
 ### Cambiado

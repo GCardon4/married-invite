@@ -10,7 +10,7 @@ export function AdminShell({ title, children }: { title: string; children: React
         <Suspense fallback={<div className="h-10" aria-hidden="true" />}>
           <AdminNav />
         </Suspense>
-        <h1 className="font-display text-3xl font-semibold text-primary-deep sm:text-4xl">{title}</h1>
+        <h1 className="font-display text-3xl font-semibold text-primary sm:text-4xl">{title}</h1>
       </header>
       <main>{children}</main>
     </div>

@@ -47,7 +47,7 @@ export function ConfirmDialog({
         event.preventDefault();
         if (!busy) onCancel();
       }}
-      className="m-auto w-[min(92vw,28rem)] rounded-2xl border border-primary/10 bg-card p-6 text-ink shadow-xl backdrop:bg-ink/40 backdrop:backdrop-blur-sm"
+      className="m-auto w-[min(92vw,28rem)] rounded-2xl border border-primary/10 bg-card p-6 text-primary shadow-xl backdrop:bg-ink/40 backdrop:backdrop-blur-sm"
     >
       <h2 id={`${id}-title`} className="font-display text-2xl font-semibold text-primary">
         {title}

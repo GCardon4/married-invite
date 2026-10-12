@@ -47,7 +47,7 @@ export function AdminNav() {
         type="button"
         onClick={logout}
         disabled={leaving}
-        className={`ml-auto rounded-full border-[1.5px] border-ink px-4 py-2 text-sm font-semibold hover:bg-ink/10 disabled:opacity-60 ${focusRing}`}
+        className={`ml-auto rounded-full border-[1.5px] border-primary px-4 py-2 text-sm font-semibold hover:bg-primary/10 disabled:opacity-60 ${focusRing}`}
       >
         {leaving ? "Saliendo…" : "Cerrar sesión"}
       </button>

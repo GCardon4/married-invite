@@ -73,7 +73,7 @@ async function GuestDetailContent({ params }: { params: PageProps<"/admin/invita
 function Item({ label, children }: { label: string; children: React.ReactNode }) {
   return (
     <div>
-      <dt className="text-xs font-semibold uppercase tracking-wider opacity-80">{label}</dt>
+      <dt className="text-xs font-semibold uppercase tracking-wider">{label}</dt>
       <dd className="mt-0.5">{children}</dd>
     </div>
   );

@@ -1,5 +1,3 @@
-import { EVENT } from "@/lib/event";
-
 const FALLBACK_COUNTRY_CODE = "57"; // Colombia: el evento es en hora de Bogotá (docs/ABOUT.md)
 
 /** Código de país que se antepone a los números de 10 dígitos sin prefijo (`WHATSAPP_DEFAULT_COUNTRY_CODE`). */
@@ -44,16 +42,12 @@ export function whatsAppDisplayNumber(phone: string | null | undefined, countryC
   return number ? `+${number}` : null;
 }
 
-/** Mensaje que recibe el invitado. Incluye su enlace personal. */
+/**
+ * Mensaje que recibe el invitado: «Hola {nombre}, queremos hacerte oficialmente la invitación a nuestra
+ * boda, haz clic en el enlace para que veas tu invitación: {enlace con el token}».
+ */
 export function buildInvitationMessage(guestName: string, link: string): string {
-  return [
-    `¡Hola, ${guestName}! 💐`,
-    "",
-    `Con mucha alegría te invitamos a la boda de ${EVENT.partner1} y ${EVENT.partner2}, el ${EVENT.dateLabel.toLowerCase()}.`,
-    "",
-    "Esta es tu invitación personal, con toda la información y para confirmar tu asistencia:",
-    link,
-  ].join("\n");
+  return `Hola ${guestName}, queremos hacerte oficialmente la invitación a nuestra boda, haz clic en el enlace para que veas tu invitación: ${link}`;
 }
 
 /**

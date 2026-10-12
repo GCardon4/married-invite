@@ -71,7 +71,7 @@ export function RsvpForm({ token, initial }: { token: string; initial: PublicInv
             setError(null);
             setEditing(true);
           }}
-          className="mt-5 rounded-[10px] border-[1.5px] border-ink px-5 py-3 text-sm font-semibold text-ink transition-colors hover:bg-ink/10 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary"
+          className="mt-5 rounded-[10px] border-[1.5px] border-primary px-5 py-3 text-sm font-semibold text-primary transition-colors hover:bg-primary/10 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary"
         >
           Cambiar mi respuesta
         </button>
@@ -114,7 +114,7 @@ export function RsvpForm({ token, initial }: { token: string; initial: PublicInv
               className="sr-only"
             />
             <span className="block font-semibold">{option.title}</span>
-            <span className="block text-sm opacity-80">{option.hint}</span>
+            <span className="block text-sm">{option.hint}</span>
           </label>
         ))}
       </fieldset>
@@ -133,7 +133,7 @@ export function RsvpForm({ token, initial }: { token: string; initial: PublicInv
                 aria-label="Una persona menos"
                 disabled={submitting || count <= 1}
                 onClick={() => setCount((c) => Math.max(1, c - 1))}
-                className="size-11 rounded-full border-[1.5px] border-ink text-xl leading-none disabled:opacity-40 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary"
+                className="size-11 rounded-full border-[1.5px] border-primary text-xl leading-none disabled:opacity-40 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary"
               >
                 −
               </button>
@@ -145,13 +145,13 @@ export function RsvpForm({ token, initial }: { token: string; initial: PublicInv
                 aria-label="Una persona más"
                 disabled={submitting || count >= max}
                 onClick={() => setCount((c) => Math.min(max, c + 1))}
-                className="size-11 rounded-full border-[1.5px] border-ink text-xl leading-none disabled:opacity-40 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary"
+                className="size-11 rounded-full border-[1.5px] border-primary text-xl leading-none disabled:opacity-40 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary"
               >
                 +
               </button>
             </div>
           )}
-          <p className="mt-2 text-xs opacity-80">Incluye a quien responde. Máximo {peopleLabel(max)}.</p>
+          <p className="mt-2 text-xs">Incluye a quien responde. Máximo {peopleLabel(max)}.</p>
         </div>
       )}
 

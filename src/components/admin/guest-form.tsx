@@ -227,7 +227,7 @@ function Field({
         {required && <span aria-hidden="true"> *</span>}
       </label>
       {children}
-      {hint && <p className="mt-1 text-xs opacity-80">{hint}</p>}
+      {hint && <p className="mt-1 text-xs">{hint}</p>}
       {error && (
         <p role="alert" className="mt-1 text-sm font-medium text-error">
           {error}
