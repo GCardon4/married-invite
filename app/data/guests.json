@@ -1,0 +1,18 @@
+{
+  "schemaVersion": 1,
+  "guests": [
+    {
+      "id": "gst_8f31a2",
+      "fullName": "María Pérez",
+      "email": null,
+      "phone": null,
+      "tokenHash": "HASH_SHA256_DEL_TOKEN",
+      "status": "pending",
+      "allowedGuests": 2,
+      "confirmedGuests": 0,
+      "respondedAt": null,
+      "createdAt": "2026-10-12T18:00:00.000Z",
+      "updatedAt": "2026-10-12T18:00:00.000Z"
+    }
+  ]
+}

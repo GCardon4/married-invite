@@ -1,36 +1,70 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Invitaciones de Matrimonio
 
-## Getting Started
+Aplicación web para gestionar invitaciones de matrimonio, confirmar asistencia de invitados y administrar el listado desde un dashboard privado.
 
-First, run the development server:
+## Objetivo
+
+Centralizar la administración de aproximadamente 150–200 invitados, generar enlaces individuales de invitación y registrar las respuestas de asistencia desde cualquier dispositivo.
+
+## Tecnologías
+
+- **Next.js:** framework de la aplicación.
+- **TypeScript:** tipado estático.
+- **Tailwind CSS:** estilos responsive.
+- **Prisma + SQLite:** persistencia local en el servidor.
+- **Zod:** validación de datos.
+- **Autenticación:** acceso restringido al dashboard administrativo.
+
+## Módulos
+
+### 1. Invitaciones públicas
+- Página personalizada del matrimonio.
+- Acceso mediante enlace único.
+- Confirmación o rechazo de asistencia.
+- Registro de acompañantes autorizados y confirmados.
+- Consulta del estado de respuesta.
+
+### 2. Dashboard administrativo
+- Inicio de sesión.
+- CRUD de invitados.
+- Búsqueda y filtros.
+- Estadísticas de asistencia.
+- Exportación de información, si se requiere.
+
+## Reglas de negocio
+
+1. Cada invitación debe tener un token único.
+2. El estado inicial será `pending`.
+3. Una confirmación válida cambiará el estado a `confirmed`.
+4. Un rechazo válido cambiará el estado a `declined`.
+5. Los acompañantes confirmados no pueden superar el cupo autorizado.
+6. Solo usuarios autorizados pueden acceder al dashboard y modificar invitados.
+7. Las operaciones de escritura se realizarán en el servidor.
+8. Las confirmaciones deben persistir después de reiniciar o actualizar la aplicación.
+
+## Instalación
+
+Requisitos: Node.js compatible con la versión de Next.js seleccionada y npm.
 
 ```bash
+npm install
+npx prisma generate
+npx prisma migrate dev
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Abrir `http://localhost:3000`.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+Los comandos de base de datos se ajustarán según la configuración inicial de Prisma y SQLite.
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## Variables de entorno
 
-## Learn More
+Configurar las variables necesarias en `.env` a partir de `.env.example`. No almacenar contraseñas, secretos de sesión ni credenciales privadas en el repositorio.
 
-To learn more about Next.js, take a look at the following resources:
+## Despliegue
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+La aplicación podrá desplegarse en Coolify mediante GitHub. Si se utiliza SQLite, se debe configurar almacenamiento persistente para la base de datos y realizar copias de seguridad antes de actualizaciones importantes.
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+## Alcance
 
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+Aplicación temporal para gestionar invitaciones y respuestas de asistencia. No incluye inicialmente notificaciones automatizadas, múltiples administradores, integración con pasarelas de pago ni una aplicación móvil nativa.
