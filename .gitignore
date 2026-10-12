@@ -35,6 +35,13 @@ yarn-error.log*
 
 # env files (can opt-in for committing if needed)
 .env*
+!.env.example
+
+# datos reales de invitados, temporales y respaldos (nunca en Git)
+/data/*
+!/data/.gitkeep
+*.bak
+*.tmp
 
 # vercel
 .vercel

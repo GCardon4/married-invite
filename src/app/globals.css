@@ -1,0 +1,104 @@
+@import "tailwindcss";
+
+/* Paleta de docs/DESIGN.md (Vibrant Flora & Nuptials). Solo tema claro. */
+:root {
+  --canvas: #faf7f5;
+  --card: #fffdfa;
+  --ink: #4a5a4d;
+  --plum: #a3305b;
+  --plum-deep: #841544;
+  --fuchsia: #d3367b;
+  --tangerine: #ff6a1e;
+  --peach: #fe9b7b;
+  --error: #ba1a1a;
+}
+
+@theme inline {
+  --color-canvas: var(--canvas);
+  --color-card: var(--card);
+  --color-ink: var(--ink);
+  --color-plum: var(--plum);
+  --color-plum-deep: var(--plum-deep);
+  --color-fuchsia: var(--fuchsia);
+  --color-tangerine: var(--tangerine);
+  --color-peach: var(--peach);
+  --color-error: var(--error);
+  --font-sans: var(--font-jakarta), ui-sans-serif, system-ui, sans-serif;
+  --font-display: var(--font-playfair), Georgia, serif;
+}
+
+body {
+  background: var(--canvas);
+  color: var(--ink);
+  font-family: var(--font-jakarta), ui-sans-serif, system-ui, sans-serif;
+}
+
+/* --- Decoración floral de la invitación --------------------------------------------------- */
+
+:root {
+  /* Naranja oscuro del sistema de diseño (secondary #a53c00): cumple contraste para texto pequeño. */
+  --tangerine-text: #a53c00;
+}
+
+@theme inline {
+  --color-tangerine-text: var(--tangerine-text);
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  html {
+    scroll-behavior: smooth;
+  }
+}
+
+/* Pétalos que caen despacio por detrás del contenido. */
+.petal {
+  position: absolute;
+  top: 0;
+  border-radius: 100% 0 100% 0;
+  opacity: 0;
+  will-change: transform, opacity;
+  animation: petal-fall var(--dur, 22s) linear var(--delay, 0s) infinite;
+}
+
+@keyframes petal-fall {
+  0% {
+    transform: translate3d(0, -8vh, 0) rotate(0deg);
+    opacity: 0;
+  }
+  8% {
+    opacity: 0.7;
+  }
+  92% {
+    opacity: 0.7;
+  }
+  100% {
+    transform: translate3d(var(--drift, 40px), 108vh, 0) rotate(540deg);
+    opacity: 0;
+  }
+}
+
+/* Balanceo muy leve de los ramos de las esquinas. */
+.flora-sway {
+  transform-origin: var(--origin, 0 0);
+  animation: flora-sway 11s ease-in-out infinite;
+}
+
+@keyframes flora-sway {
+  0%,
+  100% {
+    transform: rotate(0deg);
+  }
+  50% {
+    transform: rotate(1.4deg);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .petal,
+  .flora-sway {
+    animation: none;
+  }
+  .petal {
+    display: none;
+  }
+}

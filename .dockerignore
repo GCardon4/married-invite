@@ -1,0 +1,35 @@
+# Nada de esto debe entrar en el contexto de construcción (ni, por tanto, en la imagen).
+
+# Secretos y datos reales
+.env
+.env.*
+!.env.example
+data/
+*.bak
+*.tmp
+*.lock
+*.pem
+
+# Control de versiones y editor
+.git
+.gitignore
+.gitattributes
+.vscode
+.idea
+
+# Artefactos y dependencias (se regeneran dentro de la imagen)
+node_modules
+.next
+out
+build
+coverage
+*.tsbuildinfo
+npm-debug.log*
+
+# No necesarios para compilar
+ideas
+docs
+*.md
+Dockerfile
+.dockerignore
+docker-compose*.yml

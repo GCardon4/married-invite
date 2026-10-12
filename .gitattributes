@@ -1,0 +1,4 @@
+# Los scripts de la imagen deben tener saltos de línea LF aunque se editen en Windows.
+*.sh text eol=lf
+Dockerfile text eol=lf
+.dockerignore text eol=lf
