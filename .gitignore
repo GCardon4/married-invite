@@ -43,6 +43,17 @@ yarn-error.log*
 *.bak
 *.tmp
 
+# claves, certificados y credenciales (nunca en Git)
+*.key
+*.p12
+*.pfx
+id_rsa*
+id_ed25519*
+*.secret
+credentials*.json
+service-account*.json
+secrets/
+
 # vercel
 .vercel
 

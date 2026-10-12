@@ -1,5 +1,11 @@
 # Registro de cambios
 
+## Alertas de secretos en GitHub — 2026-10-12
+
+### Cambiado
+- Las pruebas (`tests/admin-auth.test.ts`, `tests/admin-routes.test.ts`) ya no contienen contraseñas ni hashes escritos en el código: se generan al ejecutarlas. Eran valores falsos, pero los escáneres de secretos los confundían con credenciales. No se añadió `tests/` a `.gitignore`: ignorar no quita lo ya subido y ocultaría las pruebas.
+- `.gitignore`: se excluyen también claves y credenciales (`*.key`, `*.p12`, `*.pfx`, `id_rsa*`, `id_ed25519*`, `*.secret`, `credentials*.json`, `service-account*.json`, `secrets/`).
+
 ## Página raíz eliminada e invitación de prueba — 2026-10-12
 
 ### Eliminado

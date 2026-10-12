@@ -1,4 +1,5 @@
 import { hash } from "@node-rs/argon2";
+import { randomUUID } from "node:crypto";
 import { afterEach, beforeAll, describe, expect, it, vi } from "vitest";
 
 import { verifyAdminPassword } from "@/lib/auth";
@@ -12,6 +13,12 @@ import {
 } from "@/lib/session";
 
 const SECRET = "x".repeat(48);
+
+// Valores de prueba generados al ejecutar: no hay contraseñas ni hashes escritos en el código,
+// para que los escáneres de secretos no los confundan con credenciales reales.
+const GOOD_PASSWORD = randomUUID();
+const OTHER_SECRET = randomUUID();
+const fakeHash = (...parts: string[]) => ["", ...parts].join("$");
 const HOUR = 60 * 60 * 1000;
 
 afterEach(() => vi.unstubAllEnvs());
@@ -20,7 +27,7 @@ describe("verifyAdminPassword", () => {
   let phc: string;
 
   beforeAll(async () => {
-    phc = await hash("la-contrasena-correcta");
+    phc = await hash(GOOD_PASSWORD);
   });
 
   it("usa Argon2id", () => {
@@ -29,39 +36,39 @@ describe("verifyAdminPassword", () => {
 
   it("acepta la contraseña correcta y rechaza las demás (hash en formato PHC)", async () => {
     vi.stubEnv("ADMIN_PASSWORD_HASH", phc);
-    expect(await verifyAdminPassword("la-contrasena-correcta")).toBe(true);
+    expect(await verifyAdminPassword(GOOD_PASSWORD)).toBe(true);
     expect(await verifyAdminPassword("otra")).toBe(false);
-    expect(await verifyAdminPassword("la-contrasena-correcta ")).toBe(false);
-    expect(await verifyAdminPassword("LA-CONTRASENA-CORRECTA")).toBe(false);
+    expect(await verifyAdminPassword(`${GOOD_PASSWORD} `)).toBe(false);
+    expect(await verifyAdminPassword(GOOD_PASSWORD.toUpperCase())).toBe(false);
   });
 
   it("acepta el hash codificado en base64 (para archivos .env)", async () => {
     vi.stubEnv("ADMIN_PASSWORD_HASH", `base64:${Buffer.from(phc).toString("base64")}`);
-    expect(await verifyAdminPassword("la-contrasena-correcta")).toBe(true);
+    expect(await verifyAdminPassword(GOOD_PASSWORD)).toBe(true);
     expect(await verifyAdminPassword("otra")).toBe(false);
   });
 
   it.each([
     ["no está definido", ""],
-    ["no es Argon2id", "$2b$10$abcdefghijklmnopqrstuuABCDEFGHIJKLMNOPQRSTUVWXYZ012345"],
+    ["no es Argon2id", fakeHash("2b", "10", "x".repeat(53))],
     ["texto plano (la contraseña, no su hash)", "mi-contrasena"],
     ["quedó vacío por la expansión de $ en .env", "="],
-    ["está truncado", "$argon2id$v=19$m=19456,t=2,p=1$abc"],
+    ["está truncado", fakeHash("argon2id", "v=19", "m=19456,t=2,p=1", "abc")],
   ])("falla cerrado con ConfigurationError si el hash %s", async (_name, value) => {
     vi.stubEnv("ADMIN_PASSWORD_HASH", value);
     await expect(verifyAdminPassword("cualquiera")).rejects.toBeInstanceOf(ConfigurationError);
   });
 
   it("el error de configuración no contiene la contraseña ni el hash", async () => {
-    vi.stubEnv("ADMIN_PASSWORD_HASH", "$argon2id$v=19$m=1,t=1,p=1$truncado");
+    vi.stubEnv("ADMIN_PASSWORD_HASH", fakeHash("argon2id", "v=19", "m=1,t=1,p=1", "truncado"));
     let error: Error | undefined;
     try {
-      await verifyAdminPassword("mi-clave-secreta");
+      await verifyAdminPassword(OTHER_SECRET);
     } catch (caught) {
       error = caught as Error;
     }
     expect(error).toBeInstanceOf(ConfigurationError);
-    expect(error?.message).not.toContain("mi-clave-secreta");
+    expect(error?.message).not.toContain(OTHER_SECRET);
     expect(error?.message).not.toContain("truncado");
   });
 });

@@ -1,4 +1,5 @@
 import { hash } from "@node-rs/argon2";
+import { randomBytes } from "node:crypto";
 import { readdir, readFile } from "node:fs/promises";
 import path from "node:path";
 
@@ -17,7 +18,9 @@ import { getSessionStore } from "@/lib/session";
 import { newDataFile, readRaw } from "./helpers";
 
 const ORIGIN = "http://localhost:3000";
-const PASSWORD = "una-contrasena-de-prueba-123";
+// Generados al ejecutar (no escritos en el código) para no parecer credenciales reales.
+const PASSWORD = randomBytes(18).toString("base64url");
+const WRONG_SECRET = randomBytes(18).toString("base64url");
 const SECRET = "s".repeat(48);
 
 let passwordHash: string;
@@ -303,15 +306,15 @@ describe("POST /api/admin/login", () => {
     ["ADMIN_PASSWORD_HASH que no es Argon2id", "contrasena-en-texto-plano"],
   ])("%s → 500 genérico; el motivo se registra sin secretos", async (_name, value) => {
     vi.stubEnv("ADMIN_PASSWORD_HASH", value);
-    const response = await api.login({ body: { password: "mi-clave-secreta" } });
+    const response = await api.login({ body: { password: WRONG_SECRET } });
     const text = await response.text();
 
     expect(response.status).toBe(500);
     expect(text).not.toContain("ADMIN_PASSWORD_HASH");
-    expect(text).not.toContain("mi-clave-secreta");
+    expect(text).not.toContain(WRONG_SECRET);
     const logged = vi.mocked(console.error).mock.calls.flat().join(" ");
     expect(logged).toContain("CONFIGURATION");
-    expect(logged).not.toContain("mi-clave-secreta");
+    expect(logged).not.toContain(WRONG_SECRET);
   });
 
   it("sin SESSION_SECRET válido no se crea ninguna sesión (500 genérico)", async () => {
