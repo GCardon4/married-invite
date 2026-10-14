@@ -113,8 +113,8 @@ function HeroText({ className }: { className: string }) {
       <h1 className="mt-2 font-display text-[2.1rem] font-semibold leading-tight tracking-tight text-primary min-[420px]:text-[2.5rem] lg:text-5xl">
         {EVENT.partner1} <span className="font-normal italic text-primary">&amp;</span> {EVENT.partner2}
       </h1>
+      <p>El amor que ha crecido en nosotros desde la primera vez que nos conocimos, nos ha llevado hoy a buscar en Dios la gracia para formar una familia y un hogar santo, Por esta razón después de 7 años de noviazgo hemos decidido casarnos y compartir con las personas mas especiales para nosotros, esta gran felicidad.</p>
       <p className="mt-3 font-semibold">{EVENT.dateLabel}</p>
-      <p className="text-sm">{EVENT.timeZoneLabel}</p>
     </section>
   );
 }
@@ -161,13 +161,13 @@ export function InvitationView({
             Tenemos el inmenso honor y la alegría de invitarte a celebrar nuestro amor y nuestra unión.
           </p>
           <p className="mt-2 text-sm">
-            Tu invitación es válida para hasta <strong>{peopleLabel(invitation.allowedGuests)}</strong>.
+            Tu invitación es válida para <br/> <strong>{peopleLabel(invitation.allowedGuests)}</strong>.
           </p>
         </section>
 
         {/* Cuenta regresiva */}
         <section aria-labelledby="cuenta" className={`${CARD} p-5`}>
-          <h2 id="cuenta" className="mb-3 text-center text-xs font-semibold uppercase tracking-wider">
+          <h2 id="cuenta" className="mb-3 text-center text-xs font-semibold uppercase tracking-wider text-primary">
             Faltan para el gran día
           </h2>
           <Countdown targetIso={EVENT.startsAtIso} />

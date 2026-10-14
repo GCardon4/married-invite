@@ -116,9 +116,16 @@ describe("color principal #d3367b", () => {
     expect(onCanvas).toBeLessThan(4.5);
   });
 
-  it("el texto por defecto de la página es el color principal", async () => {
+  it("los párrafos (texto por defecto de la página) van en #4a5a4d y los títulos en #d3367b", async () => {
     const css = await readFile(path.join(ROOT, "src/app/globals.css"), "utf8");
-    expect(css).toMatch(/body\s*\{[^}]*color:\s*var\(--primary\)/);
+    expect(css).toMatch(/--ink:\s*#4a5a4d/i);
+    expect(css).toMatch(/--primary:\s*#d3367b/i);
+    expect(css).toMatch(/body\s*\{[^}]*color:\s*var\(--ink\)/);
+  });
+
+  it("el texto de párrafo #4a5a4d cumple AA sobre la tarjeta y el fondo de la página", () => {
+    expect(contrast("#4a5a4d", "#fffdfa")).toBeGreaterThanOrEqual(4.5);
+    expect(contrast("#4a5a4d", "#faf7f5")).toBeGreaterThanOrEqual(4.5);
   });
 
   it("ya no se usan el gris verdoso ni el burdeos como color de texto", async () => {

@@ -1,5 +1,13 @@
 # Registro de cambios
 
+## Colores de texto: títulos `#d3367b`, párrafos `#4a5a4d` — 2026-10-13
+
+### Cambiado
+- **Títulos y subtítulos** (encabezados, etiquetas, horas, nombres) siguen en el color principal `#d3367b`.
+- **Párrafos y texto corriente** pasan a `#4a5a4d` (verde salvia): el color por defecto del `body` en `src/app/globals.css` es ahora `var(--ink)` en lugar de `var(--primary)`.
+- El encabezado «Cuenta regresiva» lleva `text-primary` explícito, porque antes dependía del color heredado.
+- `docs/DESIGN.md` actualizado. Contraste de `#4a5a4d` sobre la tarjeta y sobre el fondo de la página: cumple AA (4,5:1), con lo que el texto de párrafo ya no está limitado a ir sobre tarjetas.
+
 ## `public/images/main.jpg` como foto principal — 2026-10-15
 
 ### Cambiado

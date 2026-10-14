@@ -4,7 +4,7 @@
 :root {
   --canvas: #faf7f5;
   --card: #fffdfa;
-  /* Verde salvia: ya no se usa para texto, solo para bordes y fondos tenues. */
+  /* Verde salvia: color de los párrafos (por defecto del body) y de bordes y fondos tenues. */
   --ink: #4a5a4d;
   /* Color principal de la marca: magenta. */
   --primary: #d3367b;
@@ -30,9 +30,9 @@
 
 body {
   background: var(--canvas);
-  /* El texto va en el color principal. Sobre las tarjetas crema da 4,5:1 (AA); sobre el fondo de la
-     página, 4,3:1: por eso el texto pequeño nunca se deja suelto sobre el fondo, siempre sobre una tarjeta. */
-  color: var(--primary);
+  /* Párrafos y texto corriente en verde salvia (--ink, #4a5a4d). Títulos y subtítulos llevan
+     `text-primary` (#d3367b) de forma explícita. */
+  color: var(--ink);
   font-family: var(--font-jakarta), ui-sans-serif, system-ui, sans-serif;
 }
 

@@ -150,11 +150,11 @@ The palette directly reflects natural floral cascades:
 
 - **Primary (`#d3367b`)**: Vibrant magenta, the main brand color. Used for high-emphasis interactive elements, buttons, headings, brand marks, and active navigation items. White text on it meets AA contrast (4.6:1).
 - **Primary strong (`#b02a68`)**: A darker magenta for button hover states (white text on it reaches 6:1).
-- **Text (`#d3367b`)**: All text, headings and body, uses the primary magenta. It reaches 4.51:1 on the cream card surface (`#fffdfa`, AA) but only 4.3:1 on the page background (`#faf7f5`) and less on the pink areas, so **small text must always sit on a card or a translucent card backing**, never loose on the background. Large text (3:1) is fine anywhere. Status colors (confirmed, pending, error) keep their own colors because they carry meaning.
+- **Text**: Titles and subtitles (headings, labels, times, names) use the primary magenta `#d3367b`; paragraphs and body text use sage green `#4a5a4d` (the `body` default, token `--ink`). Magenta reaches 4.51:1 on the cream card surface (`#fffdfa`, AA) but only 4.3:1 on the page background (`#faf7f5`) and less on the pink areas, so **small magenta text must always sit on a card or a translucent card backing**; large text (3:1) is fine anywhere. Sage green passes AA on both card and page background. Status colors (confirmed, pending, error) keep their own colors because they carry meaning.
 - **Botanical imagery**: The floral artwork in `public/images/flowers/` (vintage watercolor roses in pink, wine and cream) supplies the pinks and greens around the primary magenta. The arch (`arch-flowers.png`) frames the top of the invitation; the four loose bouquets (`flower-01` to `flower-04`) decorate the page corners and section edges.
 - **Secondary (`#ff6a1e`)**: Warm tangerine orange. Used for secondary CTAs, key celebratory callouts, calendar badges, and celebratory moments.
 - **Tonal Peach (`#fe9b7b`)**: Soft petal peach. Employed for secondary button hover states, delicate pill badges, tag containers, and background highlights.
-- **Tertiary Botanical (`#4a5a4d`)**: Dark sage green. No longer used for text; kept for borders, dividers and subtle tinted backgrounds that ground the vibrant floral tones.
+- **Tertiary Botanical (`#4a5a4d`)**: Dark sage green. Paragraph text color (`body` default); also used for borders, dividers and subtle tinted backgrounds that ground the vibrant floral tones.
 - **Neutral Canvas (`#faf7f5`) & Card Neutral (`#fffdfa`)**: Warm ivory and subtle cream backdrops replacing cold, sterile pure whites to emulate high-grade cotton stationery.
 
 ## Typography
