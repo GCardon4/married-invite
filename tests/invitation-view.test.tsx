@@ -114,7 +114,6 @@ describe("InvitationView: saludo, medios y decoración floral", () => {
     expect(contentImages(html)).toEqual([]);
     expect(html).toMatch(/>K<\/span>[\s\S]*>E<\/span>/); // iniciales de los novios en el hueco del arco
     expect(html).not.toContain("<video");
-    expect(html).not.toContain("Nuestra celebración");
     expect(html).not.toContain("Nuestra historia");
   });
 
@@ -139,11 +138,11 @@ describe("InvitationView: saludo, medios y decoración floral", () => {
     expect(html).toContain('src="/videos/invitacion.mp4"');
   });
 
-  it("con galería muestra todas las fotos, cada una con texto alternativo", () => {
+  it("con galería el slider incluye todas las fotos, cada una con texto alternativo", () => {
     const gallery = [1, 2, 3].map((n) => ({ src: `/images/galeria/${n}.jpg`, alt: `Foto ${n} de Katheryn y Edwin` }));
     const html = withMedia({ gallery });
 
-    expect(html).toContain("Nuestra celebración");
+    expect(html).toContain("Ver foto 1 de 3");
     for (const photo of gallery) expect(html).toContain(`alt="${photo.alt}"`);
     expect(contentImages(html)).toHaveLength(3);
     expect(html.match(/<img(?![^>]*\balt=)/g)).toBeNull(); // toda imagen declara su atributo alt

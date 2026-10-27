@@ -1,4 +1,3 @@
-import Image from "next/image";
 import type { ReactNode } from "react";
 
 import { EVENT } from "@/lib/event";
@@ -9,6 +8,7 @@ import type { PublicInvitation } from "@/types/guest";
 import { BackgroundMusic } from "./background-music";
 import { Countdown } from "./countdown";
 import { Flower, FloralArch, FloralBackdrop, FloralDivider } from "./flora";
+import { HeroSlider, type Slide } from "./hero-slider";
 import { RsvpForm } from "./rsvp-form";
 
 const CARD =
@@ -82,19 +82,12 @@ function EventCard({
   );
 }
 
-/** Lo que va dentro del hueco del arco: la foto de los novios o, sin foto, su monograma. */
-function ArchCenter({ hero }: { hero: string | null }) {
+/** Lo que va dentro del hueco del arco: las fotos de los novios (en presentación) o, sin foto, su monograma. */
+function ArchCenter({ slides }: { slides: Slide[] }) {
   return (
-    <div className="relative h-full max-h-full w-full max-w-[86%] overflow-hidden rounded-t-[999px] rounded-b-2xl lg:h-[58%] lg:w-auto lg:max-w-none lg:aspect-[3/4] bg-gradient-to-b from-primary/10 via-card to-primary/15 shadow-[0_10px_28px_-6px_rgba(74,90,77,0.3)] ring-[1.5px] ring-[#e0b674]/60">
-      {hero ? (
-        <Image
-          src={hero}
-          alt={`${EVENT.partner1} y ${EVENT.partner2}`}
-          fill
-          priority
-          sizes="(min-width: 1024px) 440px, (min-width: 640px) 480px, 70vw"
-          className="object-cover"
-        />
+    <div className="relative h-full max-h-full w-full max-w-[100%] overflow-hidden rounded-t-[999px] rounded-b-2xl lg:h-[78%] lg:w-auto lg:max-w-none lg:aspect-[3/4] bg-gradient-to-b from-primary/10 via-card to-primary/15 shadow-[0_10px_28px_-6px_rgba(74,90,77,0.3)] ring-[1.5px] ring-[#e0b674]/60">
+      {slides.length > 0 ? (
+        <HeroSlider slides={slides} sizes="(min-width: 1024px) 440px, (min-width: 640px) 480px, 70vw" />
       ) : (
         <div className="flex h-full flex-col items-center justify-center text-center" aria-hidden="true">
           <span className="font-display text-4xl font-semibold leading-none text-primary sm:text-7xl">{EVENT.partner1[0]}</span>
@@ -115,7 +108,7 @@ function HeroText({ className }: { className: string }) {
         {EVENT.partner1} <span className="font-normal italic text-primary">&amp;</span> {EVENT.partner2}
       </h1>
       <p>El amor que ha crecido en nosotros desde la primera vez que nos conocimos, nos ha llevado hoy a buscar en Dios la gracia para formar una familia y un hogar santo, Por esta razón después de 7 años de noviazgo hemos decidido casarnos y compartir con las personas mas especiales para nosotros, esta gran felicidad.</p>
-      <p className="mt-3 font-semibold">{EVENT.dateLabel}</p>
+      <p className="mt-3 font-semibold text-primary">{EVENT.dateLabel}</p>
     </section>
   );
 }
@@ -134,13 +127,18 @@ export function InvitationView({
   const pending = invitation.status === "pending";
   const passLabel = invitation.allowedGuests > 1 ? `Pase para ${peopleLabel(invitation.allowedGuests)}` : "Pase individual";
 
+  const slides: Slide[] = [
+    ...(media.hero ? [{ src: media.hero, alt: `${EVENT.partner1} y ${EVENT.partner2}` }] : []),
+    ...media.gallery,
+  ];
+
   return (
     <div className="relative isolate flex min-h-screen flex-1 flex-col overflow-x-clip">
       <FloralBackdrop />
 
       {/* Arco floral principal, pegado al borde superior */}
       <FloralArch>
-        <ArchCenter hero={media.hero} />
+        <ArchCenter slides={slides} />
         {/* En pantallas grandes el hueco del arco es lo bastante ancho para los nombres */}
         <HeroText className="hidden lg:block" />
       </FloralArch>
@@ -240,31 +238,6 @@ export function InvitationView({
                 Tu navegador no puede reproducir este video.
               </video>
             </div>
-          </section>
-        )}
-
-        {/* Galería (solo si hay fotos en public/images/galeria) */}
-        {media.gallery.length > 0 && (
-          <section aria-labelledby="galeria">
-            <SectionTitle id="galeria">Nuestra celebración</SectionTitle>
-            <ul className="grid grid-cols-2 gap-3">
-              {media.gallery.map((photo, index) => (
-                <li
-                  key={photo.src}
-                  className={`relative overflow-hidden rounded-2xl shadow-md ring-1 ring-primary/10 ${
-                    index === 0 && media.gallery.length > 2 ? "col-span-2 aspect-[16/10]" : "aspect-[4/5]"
-                  }`}
-                >
-                  <Image
-                    src={photo.src}
-                    alt={photo.alt}
-                    fill
-                    sizes="(max-width: 640px) 50vw, 280px"
-                    className="object-cover"
-                  />
-                </li>
-              ))}
-            </ul>
           </section>
         )}
 

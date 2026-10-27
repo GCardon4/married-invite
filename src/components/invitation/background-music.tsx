@@ -2,7 +2,7 @@
 
 import { useEffect, useRef, useState } from "react";
 
-const MUSIC_SRC = "/audio/Romantic.mp3";
+const MUSIC_SRC = "/audio/music_romantic.mpeg";
 const VOLUME = 0.5;
 const UNLOCK_EVENTS = ["pointerdown", "keydown", "touchstart"] as const;
 
@@ -49,14 +49,9 @@ export function BackgroundMusic() {
 
   return (
     <>
-      <audio
-        ref={audioRef}
-        src={MUSIC_SRC}
-        loop
-        preload="auto"
-        onPlay={() => setPlaying(true)}
-        onPause={() => setPlaying(false)}
-      />
+      <audio ref={audioRef} loop preload="auto" onPlay={() => setPlaying(true)} onPause={() => setPlaying(false)}>
+        <source src={MUSIC_SRC} type="audio/mpeg" />
+      </audio>
       <button
         type="button"
         onClick={toggle}
