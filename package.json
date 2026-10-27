@@ -10,7 +10,8 @@
     "typecheck": "tsc --noEmit",
     "test": "vitest run",
     "hash-password": "node scripts/hash-password.mjs",
-    "prepare-flowers": "node scripts/prepare-flowers.mjs"
+    "prepare-flowers": "node scripts/prepare-flowers.mjs",
+    "prepare-og": "node scripts/prepare-og-image.mjs"
   },
   "dependencies": {
     "@node-rs/argon2": "^2.2.2",

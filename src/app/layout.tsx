@@ -12,7 +12,19 @@ const jakarta = Plus_Jakarta_Sans({
   subsets: ["latin"],
 });
 
+/** Origen público: las imágenes Open Graph (WhatsApp, etc.) exigen URL absolutas. */
+function metadataBase(): URL | undefined {
+  const configured = process.env.APP_BASE_URL?.trim();
+  if (!configured) return undefined;
+  try {
+    return new URL(configured);
+  } catch {
+    return undefined; // APP_BASE_URL inválida: se omite en lugar de romper todas las páginas.
+  }
+}
+
 export const metadata: Metadata = {
+  metadataBase: metadataBase(),
   title: "Katheryn & Edwin",
   description: "Invitación de matrimonio de Katheryn y Edwin",
 };

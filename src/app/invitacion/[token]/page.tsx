@@ -13,8 +13,23 @@ import { discoverMedia } from "@/lib/media";
 import type { PublicInvitation } from "@/types/guest";
 
 // El token va en la URL: no se indexa ni se reenvía a sitios externos mediante `Referer`.
+// La vista previa al compartir (WhatsApp lee estas etiquetas del HTML) es genérica: no incluye
+// el nombre del invitado. La imagen se genera con `npm run prepare-og` (docs/MEDIA.md).
+const SHARE_TITLE = "Katheryn & Edwin se casan";
+const SHARE_DESCRIPTION = "Te invitamos a celebrar nuestro matrimonio. Abre tu invitación personal.";
+
 export const metadata: Metadata = {
   title: "Tu invitación · Katheryn & Edwin",
+  description: SHARE_DESCRIPTION,
+  openGraph: {
+    type: "website",
+    locale: "es_CO",
+    siteName: "Katheryn & Edwin",
+    title: SHARE_TITLE,
+    description: SHARE_DESCRIPTION,
+    images: [{ url: "/images/og/invitacion.jpg", width: 1200, height: 630, alt: "Katheryn y Edwin" }],
+  },
+  twitter: { card: "summary_large_image", title: SHARE_TITLE, description: SHARE_DESCRIPTION, images: ["/images/og/invitacion.jpg"] },
   robots: { index: false, follow: false },
   referrer: "no-referrer",
 };
