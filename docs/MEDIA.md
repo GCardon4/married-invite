@@ -78,3 +78,4 @@ Los originales siguen siendo públicos (`/images/flowers/arch-flowers.png`) aunq
 - **Datos del evento** (fecha, lugares, mapa): `src/lib/event.ts`.
 - **Código de vestimenta:** se muestra una sección si completas `dressCode` en `src/lib/event.ts`. Hoy está vacío porque `docs/ABOUT.md` no lo define.
 - **Botón de WhatsApp:** aparece si defines la variable `WHATSAPP_NUMBER` (código de país y solo dígitos, p. ej. `573001234567`). Sin ella, el botón no se muestra.
+- **Música de fondo:** `public/audio/Romantic.mp3` se reproduce en bucle al 50 % de volumen (`src/components/invitation/background-music.tsx`). Los navegadores bloquean el sonido automático, así que si no arranca al cargar, empieza con el primer toque o tecla del invitado. Un botón fijo abajo a la izquierda la silencia o la reanuda. Para cambiar la canción, reemplaza el archivo (mismo nombre) o ajusta `MUSIC_SRC`. El archivo pesa ~6 MB; comprimirlo (p. ej. 128 kbps) acelera la carga en móvil.

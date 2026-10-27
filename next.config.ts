@@ -40,6 +40,7 @@ const nextConfig: NextConfig = {
       { source: "/:path*", headers: securityHeaders },
       { source: "/images/:path*", headers: mediaCache },
       { source: "/videos/:path*", headers: mediaCache },
+      { source: "/audio/:path*", headers: mediaCache },
     ];
   },
 };

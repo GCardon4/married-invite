@@ -6,6 +6,7 @@ import { NO_MEDIA, type InvitationMedia } from "@/lib/media";
 import { peopleLabel } from "@/lib/rsvp";
 import type { PublicInvitation } from "@/types/guest";
 
+import { BackgroundMusic } from "./background-music";
 import { Countdown } from "./countdown";
 import { Flower, FloralArch, FloralBackdrop, FloralDivider } from "./flora";
 import { RsvpForm } from "./rsvp-form";
@@ -292,6 +293,8 @@ export function InvitationView({
           </p>
         </footer>
       </main>
+
+      <BackgroundMusic />
 
       {/* Acciones siempre a mano en el teléfono */}
       <nav
