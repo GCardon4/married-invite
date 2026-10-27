@@ -31,14 +31,24 @@ const nextConfig: NextConfig = {
       },
     },
   },
+  images: {
+    // El optimizador guarda cada foto por URL: con el valor por defecto (4 h), una foto reemplazada
+    // con el mismo nombre seguiría mostrando la versión vieja durante horas.
+    minimumCacheTTL: 60,
+  },
   async headers() {
     const mediaCache = [
-      // Un día en el navegador; si se reemplaza una foto con el mismo nombre, se renueva al día siguiente.
+      // Un día en el navegador (video y audio; las fotos usan imageCache).
       { key: "Cache-Control", value: "public, max-age=86400, stale-while-revalidate=604800" },
+    ];
+    const imageCache = [
+      // Las fotos se reemplazan con el mismo nombre: el navegador pregunta en cada visita y el
+      // servidor responde 304 (sin descargar de nuevo) si no cambiaron.
+      { key: "Cache-Control", value: "public, max-age=0, must-revalidate" },
     ];
     return [
       { source: "/:path*", headers: securityHeaders },
-      { source: "/images/:path*", headers: mediaCache },
+      { source: "/images/:path*", headers: imageCache },
       { source: "/videos/:path*", headers: mediaCache },
       { source: "/audio/:path*", headers: mediaCache },
     ];
