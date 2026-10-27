@@ -96,7 +96,7 @@ describe("buildInvitationMessage / buildInvitationWhatsAppUrl", () => {
 
   it("el mensaje es exactamente el acordado, con el nombre y el enlace con el token al final", () => {
     expect(buildInvitationMessage("Familia Pérez", link)).toBe(
-      `Hola *Familia Pérez*, queremos hacerte oficialmente la invitación a nuestra boda, haz clic en el enlace para que veas tu invitación: ${link}`,
+      `Hola *Familia Pérez*, ¡Nos casamos! Eres una persona muy especial para nosotros y nos haría muchísima ilusión que nos acompañaras. Descubre todos los detalles de tu invitación aquí: ${link}`,
     );
   });
 

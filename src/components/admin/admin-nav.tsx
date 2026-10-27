@@ -47,9 +47,13 @@ export function AdminNav() {
         type="button"
         onClick={logout}
         disabled={leaving}
-        className={`ml-auto rounded-full border-[1.5px] border-primary px-4 py-2 text-sm font-semibold hover:bg-primary/10 disabled:opacity-60 ${focusRing}`}
+        aria-label={leaving ? "Saliendo…" : "Cerrar sesión"}
+        title="Cerrar sesión"
+        className={`ml-auto inline-flex size-9 items-center justify-center rounded-full border-[1.5px] border-primary text-primary hover:bg-primary/10 disabled:opacity-60 ${focusRing}`}
       >
-        {leaving ? "Saliendo…" : "Cerrar sesión"}
+        <svg aria-hidden="true" className="size-4" fill="none" stroke="currentColor" strokeWidth={1.8} strokeLinecap="round" strokeLinejoin="round" viewBox="0 0 24 24">
+          <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4M16 17l5-5-5-5M21 12H9" />
+        </svg>
       </button>
     </nav>
   );

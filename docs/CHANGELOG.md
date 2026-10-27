@@ -48,7 +48,7 @@
 ### Cambiado
 - **Todo el texto va en el color principal `#d3367b`** (antes gris verdoso, burdeos o tonos distintos): párrafos, títulos, nombres, etiquetas y los bordes de los botones de contorno. El color por defecto de la página es el principal. Los colores de estado (confirmada, pendiente, error) se conservan porque comunican significado.
 - **El botón de WhatsApp del panel es del color principal**, igual que el resto de acciones destacadas.
-- **Mensaje de WhatsApp** (texto acordado): «Hola *{nombre}*, queremos hacerte oficialmente la invitación a nuestra boda, haz clic en el enlace para que veas tu invitación: {enlace con el token}». Va en una sola línea con el enlace al final, dentro de `https://wa.me/<número>?text=…`.
+- **Mensaje de WhatsApp** (texto acordado): «Hola *{nombre}*, ¡Nos casamos! Eres una persona muy especial para nosotros y nos haría muchísima ilusión que nos acompañaras. Descubre todos los detalles de tu invitación aquí: {enlace con el token}». Va en una sola línea con el enlace al final, dentro de `https://wa.me/<número>?text=…`.
 - Se eliminó el token `primary-deep` (burdeos), que ya no se usa.
 - Los textos secundarios que usaban opacidad (`opacity-80`) ya no la usan: con el color principal, atenuarlos los dejaría por debajo del contraste AA.
 - Nombres y fecha de la portada sobre una base suave de tarjeta, y nombres algo menores en pantallas pequeñas para que quepan en una línea.
