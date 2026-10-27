@@ -49,7 +49,7 @@ export function whatsAppDisplayNumber(phone: string | null | undefined, countryC
 export function buildInvitationMessage(guestName: string, link: string): string {
   // El nombre va en negrilla de WhatsApp (*…*). Un asterisco dentro del nombre rompería el formato.
   const name = guestName.replace(/\*/g, "").trim();
-  return `Hola *${name}*, queremos hacerte oficialmente la invitación a nuestra boda, haz clic en el enlace para que veas tu invitación: ${link}`;
+  return `Hola *${name}*, ¡Nos casamos! Eres una persona muy especial para nosotros y nos haría muchísima ilusión que nos acompañaras. Descubre todos los detalles de tu invitación aquí: ${link}`;
 }
 
 /**
