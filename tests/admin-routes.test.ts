@@ -7,6 +7,7 @@ import { afterEach, beforeAll, beforeEach, describe, expect, it, vi } from "vite
 
 import * as loginRoute from "@/app/api/admin/login/route";
 import * as logoutRoute from "@/app/api/admin/logout/route";
+import * as exportRoute from "@/app/api/admin/exportar/route";
 import * as enlaceRoute from "@/app/api/admin/invitados/[id]/enlace/route";
 import * as itemRoute from "@/app/api/admin/invitados/[id]/route";
 import * as listRoute from "@/app/api/admin/invitados/route";
@@ -88,6 +89,7 @@ const api = {
     itemRoute.PATCH(request("PATCH", `/api/admin/invitados/${id}`, { ...options, body }), idCtx(id)),
   remove: (id: string, options?: Options) =>
     itemRoute.DELETE(request("DELETE", `/api/admin/invitados/${id}`, options), idCtx(id)),
+  exportar: (options?: Options) => exportRoute.GET(request("GET", "/api/admin/exportar", options)),
   regenerate: (id: string, options?: Options) =>
     enlaceRoute.POST(request("POST", `/api/admin/invitados/${id}/enlace`, options), idCtx(id)),
 };
@@ -121,6 +123,7 @@ describe("endpoints administrativos sin sesión → 401", () => {
     ["PATCH /api/admin/invitados/[id]", (cookie) => api.patch(ID, { name: "Y" }, { cookie })],
     ["DELETE /api/admin/invitados/[id]", (cookie) => api.remove(ID, { cookie })],
     ["POST /api/admin/invitados/[id]/enlace", (cookie) => api.regenerate(ID, { cookie })],
+    ["GET /api/admin/exportar", (cookie) => api.exportar({ cookie })],
   ];
 
   async function expectDenied(call: (cookie?: string) => Promise<Response>, cookie?: string) {
@@ -188,6 +191,7 @@ describe("guardia estructural: ningún endpoint administrativo omite withAdmin",
   it("el conjunto de rutas es el revisado (una ruta nueva exige actualizar esta prueba)", async () => {
     const files = (await routeFiles(ROOT)).map((f) => path.relative(ROOT, f).replaceAll("\\", "/")).sort();
     expect(files).toEqual([
+      "exportar/route.ts",
       "invitados/[id]/enlace/route.ts",
       "invitados/[id]/route.ts",
       "invitados/route.ts",
@@ -198,7 +202,7 @@ describe("guardia estructural: ningún endpoint administrativo omite withAdmin",
 
   it("cada manejador de las rutas protegidas pasa por withAdmin", async () => {
     const protectedFiles = (await routeFiles(ROOT)).filter((f) => !/[\\/](login|logout)[\\/]/.test(f));
-    expect(protectedFiles.length).toBe(3);
+    expect(protectedFiles.length).toBe(4);
 
     for (const f of protectedFiles) {
       const source = await readFile(f, "utf8");
@@ -792,5 +796,19 @@ describe("envío por WhatsApp desde el panel", () => {
     expect(response.status).toBe(401);
     expect(await response.text()).not.toContain("wa.me");
     expect(await readRaw(file)).toBe(before);
+  });
+});
+
+describe("GET /api/admin/exportar", () => {
+  it("con sesión descarga un .xlsx adjunto, sin caché", async () => {
+    await seed("Familia Pérez", 3);
+    const response = await api.exportar({ cookie: await loginCookie() });
+
+    expect(response.status).toBe(200);
+    expect(response.headers.get("content-type")).toContain("spreadsheetml.sheet");
+    expect(response.headers.get("content-disposition")).toMatch(/^attachment; filename="invitados-\d{4}-\d{2}-\d{2}\.xlsx"$/);
+    expect(response.headers.get("cache-control")).toBe("no-store");
+    const bytes = new Uint8Array(await response.arrayBuffer());
+    expect([bytes[0], bytes[1]]).toEqual([0x50, 0x4b]); // «PK»: un .xlsx es un zip
   });
 });

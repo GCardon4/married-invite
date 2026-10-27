@@ -76,7 +76,7 @@ Las sesiones viven en memoria: reiniciar el servidor las cierra. Para pruebas en
 
 ## Enviar invitaciones por WhatsApp
 
-En el panel, cada invitado con teléfono tiene un botón **WhatsApp**: abre WhatsApp (`https://wa.me/…`) con el mensaje «Hola {nombre}, queremos hacerte oficialmente la invitación a nuestra boda, haz clic en el enlace para que veas tu invitación: {enlace}» listo para enviar. Al crear una invitación el botón aparece junto al enlace; en el dashboard y el listado genera un enlace nuevo (el anterior deja de funcionar) y pide confirmación. El teléfono se interpreta según `WHATSAPP_DEFAULT_COUNTRY_CODE` (57 por defecto); sin un teléfono utilizable, el botón lleva a editar la invitación. Ver `docs/ARCHITECTURE.md` §6.3.
+En el panel, cada invitado con teléfono tiene un botón **WhatsApp**: abre WhatsApp (`https://wa.me/…`) con el mensaje «Hola *{nombre}*, queremos hacerte oficialmente la invitación a nuestra boda, haz clic en el enlace para que veas tu invitación: {enlace}» listo para enviar. Al crear una invitación el botón aparece junto al enlace; en el dashboard y el listado genera un enlace nuevo (el anterior deja de funcionar) y pide confirmación. El teléfono se interpreta según `WHATSAPP_DEFAULT_COUNTRY_CODE` (57 por defecto); sin un teléfono utilizable, el botón lleva a editar la invitación. Ver `docs/ARCHITECTURE.md` §6.3.
 
 ## Fotos y videos
 

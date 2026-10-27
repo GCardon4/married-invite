@@ -33,6 +33,13 @@ async function DashboardContent() {
 
   return (
     <div className="space-y-8">
+      <div className="flex justify-end">
+        {/* Descarga directa: la sesión viaja en la cookie. `download` evita navegar fuera del panel. */}
+        <a href="/api/admin/exportar" download className={buttonSecondary}>
+          Exportar a Excel
+        </a>
+      </div>
+
       <section aria-label="Invitaciones" className="grid grid-cols-2 gap-3 lg:grid-cols-4">
         <Stat label="Invitaciones" value={stats.totalInvitations} />
         <Stat label="Pendientes" value={stats.pendingInvitations} tone="pending" />

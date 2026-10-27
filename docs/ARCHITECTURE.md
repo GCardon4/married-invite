@@ -226,6 +226,7 @@ Medidas aplicadas:
 | `PATCH` | `/api/admin/invitados/[id]` | Actualizar invitación |
 | `DELETE` | `/api/admin/invitados/[id]` | Eliminar invitación |
 | `POST` | `/api/admin/invitados/[id]/enlace` | Regenerar el enlace (devuelve el nuevo una sola vez) |
+| `GET` | `/api/admin/exportar` | Descargar todas las invitaciones en Excel (`.xlsx`: nombre, cantidad de invitados, asistentes confirmados, estado y fecha de respuesta; sin teléfono, correo ni tokens) |
 
 Todos los endpoints administrativos deben verificar la sesión y validar las entradas recibidas.
 
@@ -250,7 +251,7 @@ El listado puede aceptar parámetros como `search`, `status`, `page` y `limit`. 
 
 **CSRF.** `SameSite=Strict`, comprobación de `Origin` y `Content-Type: application/json` en todo lo que modifica datos.
 
-**Envío por WhatsApp.** `POST /api/admin/invitados` y `POST /api/admin/invitados/[id]/enlace` devuelven además `whatsappUrl`: un enlace `https://wa.me/<número>?text=<mensaje>` armado en el servidor con el teléfono de la invitación (o `null` si no es utilizable) y este mensaje: «Hola {nombre}, queremos hacerte oficialmente la invitación a nuestra boda, haz clic en el enlace para que veas tu invitación: {enlace con el token}». El panel lo ofrece al crear, al regenerar, y desde el dashboard, el listado y el detalle de cada invitado. Como el enlace de una invitación existente no se puede recuperar, enviar desde esas pantallas **genera un enlace nuevo** (el anterior deja de funcionar) y pide confirmación. No se envía nada automáticamente: el administrador abre WhatsApp y decide enviar. El destino es siempre `wa.me` con el número normalizado en dígitos, y el nombre y el enlace van codificados en un único parámetro `text`.
+**Envío por WhatsApp.** `POST /api/admin/invitados` y `POST /api/admin/invitados/[id]/enlace` devuelven además `whatsappUrl`: un enlace `https://wa.me/<número>?text=<mensaje>` armado en el servidor con el teléfono de la invitación (o `null` si no es utilizable) y este mensaje: «Hola *{nombre}*, queremos hacerte oficialmente la invitación a nuestra boda, haz clic en el enlace para que veas tu invitación: {enlace con el token}». El panel lo ofrece al crear, al regenerar, y desde el dashboard, el listado y el detalle de cada invitado. Como el enlace de una invitación existente no se puede recuperar, enviar desde esas pantallas **genera un enlace nuevo** (el anterior deja de funcionar) y pide confirmación. No se envía nada automáticamente: el administrador abre WhatsApp y decide enviar. El destino es siempre `wa.me` con el número normalizado en dígitos, y el nombre y el enlace van codificados en un único parámetro `text`.
 
 **Enlaces.** Solo se guarda el hash del token, así que el enlace completo se entrega únicamente al crear o regenerar. Se construye con `APP_BASE_URL` (o el dominio de la solicitud si no está definida). Para obtener uno copiable de una invitación existente hay que regenerarlo, lo que invalida el anterior (la interfaz pide confirmación).
 

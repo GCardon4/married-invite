@@ -1,5 +1,12 @@
 # Registro de cambios
 
+## Exportar invitados a Excel — 2026-10-26
+
+### Añadido
+- Botón **Exportar a Excel** en el dashboard: descarga `invitados-AAAA-MM-DD.xlsx` con nombre, cantidad de invitados, asistentes confirmados, estado y fecha de respuesta (hora de Colombia; «Sin respuesta» si no hay).
+- `GET /api/admin/exportar` (`withAdmin`, sin caché) y `GuestService.listAllGuests()`. El archivo se arma en `src/lib/guest-export.ts`; no incluye teléfono, correo ni tokens, y los nombres se guardan como texto (nunca como fórmula).
+- Dependencia nueva: `write-excel-file` 4.1.1 (una sola dependencia, `fflate`).
+
 ## Colores de texto: títulos `#d3367b`, párrafos `#4a5a4d` — 2026-10-13
 
 ### Cambiado
@@ -41,7 +48,7 @@
 ### Cambiado
 - **Todo el texto va en el color principal `#d3367b`** (antes gris verdoso, burdeos o tonos distintos): párrafos, títulos, nombres, etiquetas y los bordes de los botones de contorno. El color por defecto de la página es el principal. Los colores de estado (confirmada, pendiente, error) se conservan porque comunican significado.
 - **El botón de WhatsApp del panel es del color principal**, igual que el resto de acciones destacadas.
-- **Mensaje de WhatsApp** (texto acordado): «Hola {nombre}, queremos hacerte oficialmente la invitación a nuestra boda, haz clic en el enlace para que veas tu invitación: {enlace con el token}». Va en una sola línea con el enlace al final, dentro de `https://wa.me/<número>?text=…`.
+- **Mensaje de WhatsApp** (texto acordado): «Hola *{nombre}*, queremos hacerte oficialmente la invitación a nuestra boda, haz clic en el enlace para que veas tu invitación: {enlace con el token}». Va en una sola línea con el enlace al final, dentro de `https://wa.me/<número>?text=…`.
 - Se eliminó el token `primary-deep` (burdeos), que ya no se usa.
 - Los textos secundarios que usaban opacidad (`opacity-80`) ya no la usan: con el color principal, atenuarlos los dejaría por debajo del contraste AA.
 - Nombres y fecha de la portada sobre una base suave de tarjeta, y nombres algo menores en pantallas pequeñas para que quepan en una línea.

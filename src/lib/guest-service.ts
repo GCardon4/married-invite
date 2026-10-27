@@ -123,6 +123,11 @@ export class GuestService {
     };
   }
 
+  /** Todas las invitaciones (sin paginar y sin hashes de token), para exportar desde el panel. */
+  async listAllGuests(): Promise<AdminGuest[]> {
+    return (await this.repository.list()).map(toAdminGuest);
+  }
+
   async getStatistics(): Promise<GuestStatistics> {
     return computeStatistics(await this.repository.list());
   }

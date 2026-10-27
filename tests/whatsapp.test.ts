@@ -96,8 +96,12 @@ describe("buildInvitationMessage / buildInvitationWhatsAppUrl", () => {
 
   it("el mensaje es exactamente el acordado, con el nombre y el enlace con el token al final", () => {
     expect(buildInvitationMessage("Familia Pérez", link)).toBe(
-      `Hola Familia Pérez, queremos hacerte oficialmente la invitación a nuestra boda, haz clic en el enlace para que veas tu invitación: ${link}`,
+      `Hola *Familia Pérez*, queremos hacerte oficialmente la invitación a nuestra boda, haz clic en el enlace para que veas tu invitación: ${link}`,
     );
+  });
+
+  it("un asterisco en el nombre no rompe la negrilla", () => {
+    expect(buildInvitationMessage("An*a", link)).toContain("Hola *Ana*,");
   });
 
   it("el mensaje va en una sola línea y el enlace queda al final, sin nada detrás que lo rompa", () => {
