@@ -1,3 +1,7 @@
+import { createHash } from "node:crypto";
+import { readFile } from "node:fs/promises";
+import path from "node:path";
+
 import type { Metadata } from "next";
 import { Suspense } from "react";
 
@@ -18,21 +22,39 @@ import type { PublicInvitation } from "@/types/guest";
 const SHARE_TITLE = "Katheryn & Edwin se casan";
 const SHARE_DESCRIPTION = "Te invitamos a celebrar nuestro matrimonio. Abre tu invitación personal.";
 
-export const metadata: Metadata = {
-  title: "Tu invitación · Katheryn & Edwin",
-  description: SHARE_DESCRIPTION,
-  openGraph: {
-    type: "website",
-    locale: "es_CO",
-    siteName: "Katheryn & Edwin",
-    title: SHARE_TITLE,
+/**
+ * WhatsApp guarda la imagen por su URL: si el archivo se reemplaza con el mismo nombre, sigue
+ * mostrando la vieja. Por eso la URL lleva un identificador del contenido (`?v=…`) que cambia
+ * cuando cambia la imagen. Si no se puede leer el archivo, se usa la URL sin versión.
+ */
+async function shareImageUrl(): Promise<string> {
+  const base = "/images/og/invitacion.jpg";
+  try {
+    const file = await readFile(path.join(process.cwd(), "public", base));
+    return `${base}?v=${createHash("sha256").update(file).digest("hex").slice(0, 10)}`;
+  } catch {
+    return base;
+  }
+}
+
+export async function generateMetadata(): Promise<Metadata> {
+  const image = await shareImageUrl();
+  return {
+    title: "Tu invitación · Katheryn & Edwin",
     description: SHARE_DESCRIPTION,
-    images: [{ url: "/images/og/invitacion.jpg", width: 1200, height: 630, alt: "Katheryn y Edwin" }],
-  },
-  twitter: { card: "summary_large_image", title: SHARE_TITLE, description: SHARE_DESCRIPTION, images: ["/images/og/invitacion.jpg"] },
-  robots: { index: false, follow: false },
-  referrer: "no-referrer",
-};
+    openGraph: {
+      type: "website",
+      locale: "es_CO",
+      siteName: "Katheryn & Edwin",
+      title: SHARE_TITLE,
+      description: SHARE_DESCRIPTION,
+      images: [{ url: image, width: 1200, height: 630, alt: "Katheryn y Edwin" }],
+    },
+    twitter: { card: "summary_large_image", title: SHARE_TITLE, description: SHARE_DESCRIPTION, images: [image] },
+    robots: { index: false, follow: false },
+    referrer: "no-referrer",
+  };
+}
 
 export default function InvitationPage(props: PageProps<"/invitacion/[token]">) {
   return (

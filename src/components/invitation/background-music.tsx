@@ -2,7 +2,7 @@
 
 import { useEffect, useRef, useState } from "react";
 
-const MUSIC_SRC = "/audio/music_romantic.mpeg";
+const MUSIC_SRC = "/audio/music_romantic.mp3";
 const VOLUME = 0.5;
 const UNLOCK_EVENTS = ["pointerdown", "keydown", "touchstart"] as const;
 

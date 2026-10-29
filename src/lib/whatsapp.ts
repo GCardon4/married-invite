@@ -13,10 +13,6 @@ const validInternational = (digits: string) => /^[1-9]\d{7,14}$/.test(digits);
  * código de país), o `null` si no se puede determinar con seguridad. No adivina: es mejor no
  * enviar que enviar a un número equivocado.
  *
- *   «+57 300 123 4567» → 573001234567     (prefijo explícito)
- *   «0057 300 123 4567» → 573001234567
- *   «300 123 4567»      → 573001234567     (10 dígitos: se añade el código por defecto)
- *   «573001234567»      → 573001234567     (ya empieza por el código por defecto)
  *   «300123», «abc», «3001234567 ext 5», «+0…» → null
  */
 export function normalizeWhatsAppNumber(
