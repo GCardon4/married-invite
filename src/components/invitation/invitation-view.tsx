@@ -220,6 +220,17 @@ export function InvitationView({
           </div>
         </section>
 
+        {/* Lluvia de sobres */}
+        <section aria-labelledby="sobres" className={`${CARD} p-6 text-center`}>
+          <h2 id="sobres" className="font-display text-2xl font-semibold text-primary">
+            Lluvia de Sobres
+          </h2>
+          <p className="mx-auto mt-2 max-w-sm leading-7">
+            Tu presencia es nuestro mejor regalo. Si deseas tener un detalle con nosotros, ese día
+            tendremos una lluvia de sobres.
+          </p>
+        </section>
+
         {/* Video (solo si hay archivo en public/videos) */}
         {media.video && (
           <section aria-labelledby="video">

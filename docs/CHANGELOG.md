@@ -1,5 +1,13 @@
 # Registro de cambios
 
+## Lluvia de Sobres y autoplay de la música — 2026-11-02
+
+### Añadido
+- Sección **Lluvia de Sobres** en la invitación (texto informativo, sin datos bancarios ni montos).
+
+### Cambiado
+- Música de fondo: el desbloqueo tras un autoplay bloqueado ahora escucha `pointerup`, `touchend` y `click` (además de `pointerdown` y `keydown`). `touchstart` no cuenta como gesto de usuario en Chrome ni en iOS, así que en el teléfono el sonido podía no activarse nunca.
+
 ## Exportar invitados a Excel — 2026-10-26
 
 ### Añadido

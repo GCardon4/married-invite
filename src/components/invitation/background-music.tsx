@@ -4,7 +4,9 @@ import { useEffect, useRef, useState } from "react";
 
 const MUSIC_SRC = "/audio/music_romantic.mp3";
 const VOLUME = 0.5;
-const UNLOCK_EVENTS = ["pointerdown", "keydown", "touchstart"] as const;
+// Solo estos eventos cuentan como gesto del usuario para reproducir con sonido: touchstart no
+// lo es en Chrome ni en iOS, y pointerdown solo lo es con ratón.
+const UNLOCK_EVENTS = ["pointerdown", "pointerup", "touchend", "click", "keydown"] as const;
 
 const iconProps = { "aria-hidden": true, className: "size-5", fill: "none", stroke: "currentColor", strokeWidth: 1.8, strokeLinecap: "round", strokeLinejoin: "round", viewBox: "0 0 24 24" } as const;
 
