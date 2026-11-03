@@ -4,6 +4,7 @@
 
 ### Añadido
 - Sección **Lluvia de Sobres** en la invitación (texto informativo, sin datos bancarios ni montos).
+- Pasaje bíblico (Gn 2, 18 y 2, 24) entre el saludo y la cuenta regresiva.
 
 ### Cambiado
 - Música de fondo: el desbloqueo tras un autoplay bloqueado ahora escucha `pointerup`, `touchend` y `click` (además de `pointerdown` y `keydown`). `touchstart` no cuenta como gesto de usuario en Chrome ni en iOS, así que en el teléfono el sonido podía no activarse nunca.

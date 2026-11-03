@@ -164,6 +164,20 @@ export function InvitationView({
           </p>
         </section>
 
+        {/* Pasaje bíblico */}
+        <section aria-label="Pasaje bíblico" className={`${CARD} px-7 py-6 text-center`}>
+          <blockquote className="font-display text-lg italic leading-8">
+            <p>
+              El hombre y la mujer fueron creados el uno para el otro; «No es bueno que el hombre
+              esté solo» (Gn 2, 18).
+            </p>
+            <p className="mt-3">
+              «Por eso deja el hombre a su padre y a su madre y se une a su mujer, y se hacen una
+              sola carne» (Gn 2, 24).
+            </p>
+          </blockquote>
+        </section>
+
         {/* Cuenta regresiva */}
         <section aria-labelledby="cuenta" className={`${CARD} p-5`}>
           <h2 id="cuenta" className="mb-3 text-center text-xs font-semibold uppercase tracking-wider text-primary">
